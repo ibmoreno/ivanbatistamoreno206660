@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@OpenAPIDefinition(info = @Info(title = "Open API Definition", version = "1.0.0", description = "Album API"))
+@OpenAPIDefinition(info = @Info(title = "Open API Definition", version = "1.0.0", description = "API REST - Artistas e Álbuns"))
 @SpringBootApplication
 public class AlbumApiApplication {
 
