@@ -7,22 +7,34 @@
 
 ## Anexo II - A - Projeto Desenvolvedor Backend
 
+API REST para disponibilizar dados referentes à artistas e álbuns.
 
+Estrutura de dados proposta:
 
-### REST API documentação com OpenAPI 3.0
+![DER (Diagrama Entidade-Relacionamento) ](./assets/DER.png)
 
-Veja os recursos disponíveis do serviço **ALBUM-API** na documentação.
+Relacionamento Artista X Álbum é **N:N**, Exemplos comuns no mundo real:
+- Artista convidado em um álbum
+- Álbuns colaborativos
+- Bandas + artista solo no mesmo álbum
+- Participação especial
 
-* http://localhost:8080/v3/api-docs
-* http://localhost:8080/swagger-ui/index.html
+Logo um artista pode participar de vários álbuns e um álbum pode ter vários artistas.</br>
+Para resolver a redundância de dados e inconsistência na sua relação e representação foi criado 
+uma entidade associativa com nome **artista_album**.
 
-### Health Checks e Liveness/Readiness
+### Documentação dos Recursos
+
+Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
+
+* [Open API Definition - JSON Format](http://localhost:8080/v3/api-docs)
+* [Open API Definition - Swagger UI](http://localhost:8080/swagger-ui/index.html)
+
+### Recursos de Monitoramento
 
 Recursos disponíveis para monitoramento da aplicação.
 
-* http://localhost:8080/actuator/health
-* http://localhost:8080/actuator/health/liveness
-* http://localhost:8080/actuator/health/readiness
-
-
+* [Health Checks Endpoint](http://localhost:8080/actuator/health)
+* [Liveness Endpoint](http://localhost:8080/actuator/health/liveness)
+* [Readiness Endpoint](http://localhost:8080/actuator/health/readiness)
 
