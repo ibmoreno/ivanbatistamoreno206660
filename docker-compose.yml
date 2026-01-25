@@ -1,0 +1,21 @@
+name: seplag-services
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:17.4
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      TZ: "America/Cuiaba"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local

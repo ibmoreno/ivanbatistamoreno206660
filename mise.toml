@@ -1,3 +1,6 @@
 [tools]
 java = "openjdk-21.0.2"
 maven = "3.9.11"
+
+[env]
+_.file = ".env"

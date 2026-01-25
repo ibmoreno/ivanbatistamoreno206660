@@ -5,6 +5,18 @@ spring:
   application:
     name: album-api
 
+  datasource:
+    url: ${JDBC_POSTGRES_URL:jdbc:postgresql://localhost:5432/ivanbatistamoreno206660db}
+    driver-class-name: org.postgresql.Driver
+    username: ${JDBC_POSTGRES_USER:userdb}
+    password: ${JDBC_POSTGRES_PASSWORD:userdb}
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: ${HIBERNATE_SHOW_SQL:false}
+        format_sql: ${HIBERNATE_FORMAT_SQL:false}
+
   actuator:
     endpoint:
       health:
@@ -36,7 +48,9 @@ management:
 springdoc:
   show-actuator: true
   api-docs:
+    enabled: ${SPRINGDOC_API_DOCS_ENABLED:false}
     path: /v3/api-docs
   swagger-ui:
+    enabled: ${SPRINGDOC_SWAGGER_UI_ENABLED:false}
     path: /swagger-ui.html
     operationsSorter: method
