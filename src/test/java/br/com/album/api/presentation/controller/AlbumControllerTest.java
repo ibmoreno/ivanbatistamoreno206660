@@ -1,6 +1,8 @@
 package br.com.album.api.presentation.controller;
 
 import br.com.album.api.application.service.AlbumService;
+import br.com.album.api.exception.NotFoundException;
+import br.com.album.api.exception.handler.RestExceptionHandler;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.ArtistaResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,6 +43,7 @@ class AlbumControllerTest {
         albumService = mock(AlbumService.class);
         AlbumController albumController = new AlbumController(albumService);
         mockMvc = MockMvcBuilders.standaloneSetup(albumController)
+                .setControllerAdvice(new RestExceptionHandler())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
     }
@@ -110,6 +114,56 @@ class AlbumControllerTest {
         result.andExpect(MockMvcResultMatchers.jsonPath("$.titulo").value("Album 1"));
         result.andExpect(MockMvcResultMatchers.jsonPath("$.artistas.size()").value(1));
 
+    }
+
+
+    @Test
+    void shouldReturnAlbumsWhenFindByIdIsCalled() throws Exception {
+
+        // given
+        Long albumId = 1L;
+        ArtistaResponse artistaResponse = ArtistaResponse.builder().id(1L).nome("Artista 1").build();
+        AlbumResponse albumResponse = AlbumResponse.builder().id(1L).titulo("Album 1")
+                .artistas(Set.of(artistaResponse)).build();
+
+        Mockito.when(albumService.getById(anyLong())).thenReturn(albumResponse);
+
+        // when
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/album/{id}", albumId)
+                .accept(MediaType.APPLICATION_JSON)
+
+        );
+
+        // then
+        result.andExpect(status().isOk());
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(albumId));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.titulo").value("Album 1"));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.artistas.size()").value(1));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.artistas.size()").value(1));
+
+        verify(albumService).getById(anyLong());
+
+    }
+
+
+    @Test
+    void shouldReturnNotFoundExceptionWhenNotFoundFindByIdIsCalled() throws Exception {
+
+        // given
+        Long albumId = -1L;
+
+        Mockito.when(albumService.getById(anyLong()))
+                .thenThrow(new NotFoundException("Not Found Album"));
+
+        // when
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/album/{id}", albumId)
+                .accept(MediaType.APPLICATION_JSON)
+
+        );
+
+        // then
+        result.andExpect(status().isNotFound());
+        verify(albumService).getById(anyLong());
     }
 
 }
