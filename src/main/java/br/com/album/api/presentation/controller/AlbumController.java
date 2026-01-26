@@ -2,6 +2,7 @@ package br.com.album.api.presentation.controller;
 
 import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
+import br.com.album.api.presentation.controller.dto.ArtistaAlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -75,6 +77,16 @@ public class AlbumController {
     public ResponseEntity<AlbumResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateAlbumRequest updateAlbumRequest) {
         AlbumResponse response = albumService.update(id, updateAlbumRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Lista Artista com os seus albuns")
+    @ApiResponse(responseCode = "200", description = "Artistas listados com sucesso")
+    @GetMapping("/artista")
+    public ResponseEntity<Page<ArtistaAlbumResponse>> findArtistaByName(@RequestParam(required = false) String nome,
+                                                                        @SortDefault(sort = {"nome"}, direction = Sort.Direction.ASC)
+                                                                       @ParameterObject Pageable pageable) {
+        Page<ArtistaAlbumResponse> responses = albumService.findArtistaByName(nome, pageable);
+        return ResponseEntity.ok(responses);
     }
 
 

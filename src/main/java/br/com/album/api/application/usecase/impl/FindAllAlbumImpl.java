@@ -4,9 +4,11 @@ import br.com.album.api.application.adapter.AlbumAdapter;
 import br.com.album.api.application.usecase.FindAllAlbum;
 import br.com.album.api.infra.database.jpa.AlbumEntity;
 import br.com.album.api.infra.database.jpa.AlbumEntity_;
+import br.com.album.api.infra.database.jpa.ArtistaEntity_;
 import br.com.album.api.infra.database.repository.AlbumRepository;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
+import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +26,15 @@ public class FindAllAlbumImpl implements FindAllAlbum {
     @Override
     @Transactional
     public Page<AlbumResponse> execute(FindAllAlbumRequest findAllAlbumRequest, Pageable pageable) {
-        Specification<AlbumEntity> spec = createSpecification(findAllAlbumRequest);
+        Specification<AlbumEntity> spec = Specification.allOf(
+                withTituloAlbum(findAllAlbumRequest),
+                withIdArtista(findAllAlbumRequest)
+        );
         Page<AlbumEntity> page = repository.findAll(spec, pageable);
         return convertToResponse(page);
     }
 
-    private Specification<AlbumEntity> createSpecification(FindAllAlbumRequest findAllAlbumRequest) {
+    private Specification<AlbumEntity> withTituloAlbum(FindAllAlbumRequest findAllAlbumRequest) {
         if (findAllAlbumRequest == null || !StringUtils.hasText(findAllAlbumRequest.getTitulo())) {
             return (root, query, criteriaBuilder) -> null;
         }
@@ -37,6 +42,17 @@ public class FindAllAlbumImpl implements FindAllAlbum {
         String titulo = "%" + findAllAlbumRequest.getTitulo().toLowerCase() + "%";
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(criteriaBuilder.lower(root.get(AlbumEntity_.titulo)), titulo);
+    }
+
+    private Specification<AlbumEntity> withIdArtista(FindAllAlbumRequest findAllAlbumRequest) {
+        if (findAllAlbumRequest == null || findAllAlbumRequest.getArtistaId() == null) {
+            return (root, query, criteriaBuilder) -> null;
+        }
+
+        return (root, query, criteriaBuilder) ->
+                root.join(AlbumEntity_.artistas, JoinType.INNER)
+                        .get(ArtistaEntity_.id)
+                        .in(findAllAlbumRequest.getArtistaId());
     }
 
     private Page<AlbumResponse> convertToResponse(Page<AlbumEntity> page) {

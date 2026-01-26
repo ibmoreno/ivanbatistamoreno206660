@@ -1,6 +1,7 @@
 package br.com.album.api.application.service;
 
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
+import br.com.album.api.presentation.controller.dto.ArtistaAlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
@@ -16,4 +17,6 @@ public interface AlbumService {
     AlbumResponse getById(Long id);
 
     AlbumResponse update(Long id, UpdateAlbumRequest updateAlbumRequest);
+
+    Page<ArtistaAlbumResponse> findArtistaByName(String nome, Pageable pageable);
 }

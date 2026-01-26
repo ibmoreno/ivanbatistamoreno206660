@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 public class FindAllAlbumRequest {
     @Schema(description = "Titulo do album", example = "Album 1")
     private String titulo;
+    @Schema(description = "ID do Artista", example = "1")
+    private Long artistaId;
 }
