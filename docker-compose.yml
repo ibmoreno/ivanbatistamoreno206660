@@ -1,4 +1,4 @@
-name: seplag-services
+name: ivanbatistamoreno206660-services
 services:
   postgres:
     container_name: postgres
@@ -15,6 +15,21 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       LANG: C.UTF-8
       LC_ALL: C.UTF-8
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: unless-stopped
+    volumes:
+      - minio_data:/data
+    environment:
+      TZ: "America/Cuiaba"
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    command: server /data --console-address ":9001"
 
 volumes:
   postgres_data:
