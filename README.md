@@ -9,6 +9,34 @@
 
 API REST para disponibilizar dados referentes à artistas e álbuns.
 
+### Execução em docker compose
+
+Para executar a API, execute o seguinte comando:
+
+```bash
+docker compose up -d
+```
+
+### Variáveis de Ambiente
+
+As variáveis de ambiente necessárias para a execução da API estão no arquivo .env
+
+| Variável | Descrição                         |
+| --- |-----------------------------------|
+| JDBC_POSTGRES_URL| URL de conexão com banco de dados |
+| JDBC_POSTGRES_USER| Usuário de conexão com banco de dados |
+| JDBC_POSTGRES_PASSWORD| Senha de conexão com banco de dados |
+| HIBERNATE_SHOW_SQL| Mostra as queries SQL no console |
+| HIBERNATE_FORMAT_SQL| Formata as queries SQL no console |
+| SPRINGDOC_API_DOCS_ENABLED| Habilita a documentação da API |
+| SPRINGDOC_SWAGGER_UI_ENABLED| Habilita a interface de documentação da API |
+| POSTGRES_DB| Nome do banco de dados |
+| POSTGRES_USER| Usuário de conexão com banco de dados |
+| POSTGRES_PASSWORD| Senha de conexão com banco de dados |
+
+
+## Estrutura do Projeto
+
 Estrutura de dados proposta:
 
 ![DER (Diagrama Entidade-Relacionamento) ](./assets/DER.png)
@@ -23,14 +51,22 @@ Logo um artista pode participar de vários álbuns e um álbum pode ter vários 
 Para resolver a redundância de dados e inconsistência na sua relação e representação foi criado 
 uma entidade associativa com nome **artista_album**.
 
-### Documentação dos Recursos
+## Documentação dos Recursos
 
 Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
 
 * [Open API Definition - JSON Format](http://localhost:8080/v3/api-docs)
 * [Open API Definition - Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
-### Recursos de Monitoramento
+### Exemplos de Requisições:
+
+- Listar Albuns
+
+```shell
+curl --location 'http://localhost:8080/api/v1/album?size=10&page=0&sort=titulo%2CDESC'
+```
+
+## Recursos de Monitoramento
 
 Recursos disponíveis para monitoramento da aplicação.
 
