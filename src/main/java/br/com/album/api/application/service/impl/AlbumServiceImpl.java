@@ -3,14 +3,16 @@ package br.com.album.api.application.service.impl;
 import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.application.usecase.CreateAlbum;
 import br.com.album.api.application.usecase.FindAllAlbum;
-import br.com.album.api.application.usecase.FindArtistaByName;
 import br.com.album.api.application.usecase.GetAlbumById;
 import br.com.album.api.application.usecase.UpdateAlbum;
+import br.com.album.api.application.usecase.UploadCapaAlbum;
+import br.com.album.api.presentation.controller.dto.AlbumResponse;
+import br.com.album.api.presentation.controller.dto.CapaAlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
-import br.com.album.api.presentation.controller.dto.AlbumResponse;
-import br.com.album.api.presentation.controller.dto.ArtistaAlbumResponse;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
+import java.io.InputStream;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final CreateAlbum createAlbum;
     private final GetAlbumById getAlbumById;
     private final UpdateAlbum updateAlbum;
-    private final FindArtistaByName findArtistaByName;
+    private final UploadCapaAlbum uploadCapaAlbum;
 
     @Override
     public Page<AlbumResponse> findAll(FindAllAlbumRequest findAllAlbumRequest, Pageable pageable) {
@@ -47,7 +49,7 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Page<ArtistaAlbumResponse> findArtistaByName(String nome, Pageable pageable) {
-        return findArtistaByName.execute(nome, pageable);
+    public List<CapaAlbumResponse> uploadCapa(Long id, List<InputStream> capas) {
+        return uploadCapaAlbum.execute(id, capas);
     }
 }

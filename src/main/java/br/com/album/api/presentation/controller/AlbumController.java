@@ -1,8 +1,9 @@
 package br.com.album.api.presentation.controller;
 
 import br.com.album.api.application.service.AlbumService;
+import br.com.album.api.exception.ApiServiceApplicationException;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
-import br.com.album.api.presentation.controller.dto.ArtistaAlbumResponse;
+import br.com.album.api.presentation.controller.dto.CapaAlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
@@ -10,7 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Tag(name = "AlbumController", description = "Album API")
@@ -79,15 +84,21 @@ public class AlbumController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Lista Artista com os seus albuns")
-    @ApiResponse(responseCode = "200", description = "Artistas listados com sucesso")
-    @GetMapping("/artista")
-    public ResponseEntity<Page<ArtistaAlbumResponse>> findArtistaByName(@RequestParam(required = false) String nome,
-                                                                        @SortDefault(sort = {"nome"}, direction = Sort.Direction.ASC)
-                                                                       @ParameterObject Pageable pageable) {
-        Page<ArtistaAlbumResponse> responses = albumService.findArtistaByName(nome, pageable);
-        return ResponseEntity.ok(responses);
+    @Operation(summary = "Upload de capas de um album")
+    @ApiResponse(responseCode = "200", description = "Capas de um album carregadas com sucesso")
+    @PostMapping("/{id}/capa")
+    public ResponseEntity<List<CapaAlbumResponse>> uploadCapa(@PathVariable Long id,
+                                                              @Valid @RequestParam("files") MultipartFile[] files) {
+        try {
+            List<InputStream> capas = new ArrayList<>();
+            for (MultipartFile file : files) {
+                capas.add(file.getInputStream());
+            }
+            List<CapaAlbumResponse> response = albumService.uploadCapa(id, capas);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new ApiServiceApplicationException(e.getMessage());
+        }
     }
-
 
 }
