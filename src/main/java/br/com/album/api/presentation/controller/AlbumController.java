@@ -4,6 +4,7 @@ import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
+import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +67,14 @@ public class AlbumController {
                 .toUri();
 
         return ResponseEntity.created(location).body(response);
+    }
+
+    @Operation(summary = "Atualiza dados de um album juntamente com os artistas")
+    @ApiResponse(responseCode = "200", description = "Album atualizado com sucesso")
+    @PutMapping("/{id}")
+    public ResponseEntity<AlbumResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateAlbumRequest updateAlbumRequest) {
+        AlbumResponse response = albumService.update(id, updateAlbumRequest);
+        return ResponseEntity.ok(response);
     }
 
 
