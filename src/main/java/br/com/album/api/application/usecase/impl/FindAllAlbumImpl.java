@@ -1,12 +1,12 @@
 package br.com.album.api.application.usecase.impl;
 
+import br.com.album.api.application.adapter.AlbumAdapter;
 import br.com.album.api.application.usecase.FindAllAlbum;
 import br.com.album.api.infra.database.jpa.AlbumEntity;
+import br.com.album.api.infra.database.jpa.AlbumEntity_;
 import br.com.album.api.infra.database.repository.AlbumRepository;
-import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
-import br.com.album.api.presentation.controller.dto.ArtistaResponse;
-import java.util.stream.Collectors;
+import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,17 +36,11 @@ public class FindAllAlbumImpl implements FindAllAlbum {
 
         String titulo = "%" + findAllAlbumRequest.getTitulo().toLowerCase() + "%";
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), titulo);
+                criteriaBuilder.like(criteriaBuilder.lower(root.get(AlbumEntity_.titulo)), titulo);
     }
 
     private Page<AlbumResponse> convertToResponse(Page<AlbumEntity> page) {
-        return page.map(entity -> AlbumResponse.builder().id(entity.getId())
-                .titulo(entity.getTitulo())
-                .artistas(entity.getArtistas().stream().map(artistaEntity -> ArtistaResponse.builder()
-                        .id(artistaEntity.getId())
-                        .nome(artistaEntity.getNome())
-                        .build()).collect(Collectors.toSet()))
-                .build());
+        return page.map(AlbumAdapter::convertToResponse);
     }
 
 }

@@ -3,6 +3,8 @@ package br.com.album.api.presentation.controller;
 import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.ArtistaResponse;
+import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
+import br.com.album.api.presentation.controller.dto.CreateArtistaRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -71,6 +74,41 @@ class AlbumControllerTest {
         result.andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1));
 
         verify(albumService).findAll(any(FindAllAlbumRequest.class), any(Pageable.class));
+
+    }
+
+    @Test
+    void shouldSalveAlbumWithSuccess() throws Exception {
+
+        // given
+        CreateAlbumRequest request = CreateAlbumRequest.builder()
+                .titulo("Album 1")
+                .artistas(Set.of(CreateArtistaRequest.builder().nome("Artista 1").build()))
+                .build();
+
+        AlbumResponse response = AlbumResponse.builder()
+                .id(1L)
+                .titulo("Album 1")
+                .artistas(Set.of(ArtistaResponse.builder()
+                        .id(1L)
+                        .nome("Artista 1")
+                        .build()))
+                .build();
+
+        Mockito.when(albumService.create(any(CreateAlbumRequest.class))).thenReturn(response);
+
+        // when
+        var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/album")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        );
+
+        // then
+        result.andExpect(status().isCreated());
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.titulo").value("Album 1"));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.artistas.size()").value(1));
 
     }
 
