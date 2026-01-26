@@ -3,6 +3,7 @@ package br.com.album.api.application.service.impl;
 import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.application.usecase.CreateAlbum;
 import br.com.album.api.application.usecase.FindAllAlbum;
+import br.com.album.api.application.usecase.GetAlbumById;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
@@ -17,6 +18,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final FindAllAlbum findAllAlbum;
     private final CreateAlbum createAlbum;
+    private final GetAlbumById getAlbumById;
 
     @Override
     public Page<AlbumResponse> findAll(FindAllAlbumRequest findAllAlbumRequest, Pageable pageable) {
@@ -26,5 +28,10 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public AlbumResponse create(CreateAlbumRequest createAlbumRequest) {
         return createAlbum.execute(createAlbumRequest);
+    }
+
+    @Override
+    public AlbumResponse getById(Long id) {
+        return getAlbumById.execute(id);
     }
 }

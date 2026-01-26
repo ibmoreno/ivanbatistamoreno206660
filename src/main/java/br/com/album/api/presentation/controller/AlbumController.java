@@ -18,6 +18,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,14 @@ public class AlbumController {
                                                        @ParameterObject Pageable pageable) {
         Page<AlbumResponse> responses = albumService.findAll(findAllAlbumRequest, pageable);
         return ResponseEntity.ok(responses);
+    }
+
+    @Operation(summary = "Busca um album por ID")
+    @ApiResponse(responseCode = "200", description = "Album encontrado com sucesso")
+    @GetMapping("/{id}")
+    public ResponseEntity<AlbumResponse> findById(@PathVariable Long id) {
+        AlbumResponse response = albumService.getById(id);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Cria um album juntamente com os artistas")

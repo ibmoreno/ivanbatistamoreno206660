@@ -11,4 +11,6 @@ public interface AlbumService {
     Page<AlbumResponse> findAll(FindAllAlbumRequest findAllAlbumRequest, Pageable pageable);
 
     AlbumResponse create(CreateAlbumRequest createAlbumRequest);
+
+    AlbumResponse getById(Long id);
 }
