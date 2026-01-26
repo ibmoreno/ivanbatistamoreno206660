@@ -23,13 +23,13 @@ public class AlbumEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome", nullable = false, length = 300)
-    private String nome;
+    @Column(name = "titulo", nullable = false, length = 300)
+    private String titulo;
 
     @ManyToMany
     @JoinTable(name = "artista_album",
-        joinColumns = @JoinColumn(name = "album_id"),
-        inverseJoinColumns = @JoinColumn(name = "artista_id"))
+        joinColumns = @JoinColumn(name = "id_album"),
+        inverseJoinColumns = @JoinColumn(name = "id_artista"))
     private Set<ArtistaEntity> artistas;
 
 }

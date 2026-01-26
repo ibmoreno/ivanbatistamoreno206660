@@ -1,0 +1,39 @@
+package br.com.album.api.presentation.controller;
+
+import br.com.album.api.application.service.AlbumService;
+import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
+import br.com.album.api.presentation.controller.dto.AlbumResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Tag(name = "AlbumController", description = "Album API")
+@RestController
+@RequestMapping("/api/v1/album")
+@RequiredArgsConstructor
+public class AlbumController {
+
+    private final AlbumService albumService;
+
+    @Operation(summary = "Lista todos os albums")
+    @ApiResponse(responseCode = "200", description = "Albums listados com sucesso")
+    @GetMapping
+    public ResponseEntity<Page<AlbumResponse>> findAll(@ParameterObject FindAllAlbumRequest findAllAlbumRequest,
+                                                       @SortDefault(sort = {"titulo"}, direction = Sort.Direction.ASC)
+                                                       @ParameterObject Pageable pageable) {
+        Page<AlbumResponse> responses = albumService.findAll(findAllAlbumRequest, pageable);
+        return ResponseEntity.ok(responses);
+    }
+
+
+}
