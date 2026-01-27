@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,11 +26,14 @@ class CreateAlbumImplTest extends TestPostgreSQLContainer {
     @Autowired
     private AlbumRepository albumRepository;
 
+    @MockitoBean
+    private ApplicationEventPublisher eventPublisher;
+
     private CreateAlbum createAlbum;
 
     @BeforeEach
     void setUp() {
-        createAlbum = new CreateAlbumImpl(albumRepository);
+        createAlbum = new CreateAlbumImpl(albumRepository, eventPublisher);
     }
 
     @Test

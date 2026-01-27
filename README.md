@@ -64,6 +64,12 @@ Logo um artista pode participar de vários álbuns e um álbum pode ter vários 
 Para resolver a redundância de dados e inconsistência na sua relação e representação foi criado 
 uma entidade associativa com nome **artista_album**.
 
+## Notificação via websocket
+
+Notificação de eventos quando um novo album é cadastrado: [acompanhe aqui](http://localhost:8080).
+
+![WEBSOCKET](./assets/web-socket-notification.png)
+
 ## Documentação dos Recursos
 
 Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
