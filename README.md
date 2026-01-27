@@ -15,11 +15,11 @@ API REST para disponibilizar dados referentes à artistas e álbuns.
 - [Maven (3.9.11)](https://maven.apache.org/docs/3.9.11/release-notes.html)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- [Mise](https://mise.jdx.dev/dev-tools/)
+- [Mise tools (opcional)](https://mise.jdx.dev/dev-tools/)
 
 ### Execução em docker compose
 
-Para executar a API, execute o seguinte comando:
+Para executar a API, execute o seguinte comando docker:
 
 ```bash
 docker compose up -d
@@ -34,21 +34,40 @@ docker compose logs
 
 As variáveis de ambiente necessárias para a execução da API estão no arquivo .env
 
-| Variável | Descrição                         |
-| --- |-----------------------------------|
-| JDBC_POSTGRES_URL| URL de conexão com banco de dados |
-| JDBC_POSTGRES_USER| Usuário de conexão com banco de dados |
-| JDBC_POSTGRES_PASSWORD| Senha de conexão com banco de dados |
-| HIBERNATE_SHOW_SQL| Mostra as queries SQL no console |
-| HIBERNATE_FORMAT_SQL| Formata as queries SQL no console |
-| SPRINGDOC_API_DOCS_ENABLED| Habilita a documentação da API |
+| Variável | Descrição                                   |
+| --- |---------------------------------------------|
+| JDBC_POSTGRES_URL| URL de conexão com banco de dados           |
+| JDBC_POSTGRES_USER| Usuário de conexão com banco de dados       |
+| JDBC_POSTGRES_PASSWORD| Senha de conexão com banco de dados         |
+| HIBERNATE_SHOW_SQL| Mostra as queries SQL no console            |
+| HIBERNATE_FORMAT_SQL| Formata as queries SQL no console           |
+| SPRINGDOC_API_DOCS_ENABLED| Habilita a documentação da API              |
 | SPRINGDOC_SWAGGER_UI_ENABLED| Habilita a interface de documentação da API |
-| POSTGRES_DB| Nome do banco de dados |
-| POSTGRES_USER| Usuário de conexão com banco de dados |
-| POSTGRES_PASSWORD| Senha de conexão com banco de dados |
+| POSTGRES_DB| Nome do banco de dados                      |
+| POSTGRES_USER| Usuário de conexão com banco de dados       |
+| POSTGRES_PASSWORD| Senha de conexão com banco de dados         |
+| MINIO_USER| Usuário de acesso ao console do MinIO       |
+| MINIO_PASSWORD| Senha de acesso ao console do MinIO          |
+| MINIO_ENDPOINT| Endereço do MinIO                           |
+| MINIO_BUCKET_NAME| Nome do bucket do MinIO                     |
+| MINIO_ACCESS_KEY| Chave de acesso do MinIO                    |
+| MINIO_SECRET_KEY| Chave secreta do MinIO                      |
 
 
-## Estrutura do Projeto
+### Banco de Dados PostgreSQL
+
+O serviço via docker-compose.yml:
+
+```bash
+ docker compose up -d postgres
+```
+
+Para verificar os logs do banco de dados
+```bash
+docker compose logs postgres
+```
+
+### Schema do Banco de Dados
 
 Estrutura de dados proposta:
 
@@ -64,13 +83,35 @@ Logo um artista pode participar de vários álbuns e um álbum pode ter vários 
 Para resolver a redundância de dados e inconsistência na sua relação e representação foi criado 
 uma entidade associativa com nome **artista_album**.
 
-## Notificação via websocket
 
-Notificação de eventos quando um novo album é cadastrado: [acompanhe aqui](http://localhost:8080).
+### Integração com MinIO (API S3)
+
+Suporte a upload de imagens para capa do álbum cadastrado via API S3 do MinIO.
+
+- Repositório de Imagem dos Álbuns
+![minio](./assets/minio-console.png)
+
+- Preview da Imagem selecionada
+![minio](./assets/minio-capa-album.png)
+
+Serviço via docker-compose.yml
+
+```bash
+ docker compose up -d minio
+```
+
+Para verificar os logs do serviço minIO
+```bash
+docker compose logs minio
+```
+
+### Notificação via websocket
+
+Notificação quando um novo album é cadastrado: [acompanhe aqui](http://localhost:8080).
 
 ![WEBSOCKET](./assets/web-socket-notification.png)
 
-## Documentação dos Recursos
+### Documentação dos Recursos
 
 Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
 
@@ -78,7 +119,7 @@ Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
 * [Open API Definition - Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
 
-## Recursos de Monitoramento
+### Recursos de Monitoramento
 
 Recursos disponíveis para monitoramento da aplicação.
 
@@ -107,4 +148,6 @@ Foi implementado todos os requisitos descritos no edital, em destaque:
 - Health Checks para monitoramento da aplicação, Liveness e Readiness.
 - Uso de Flyway para controle de versão do banco de dados.
 - Testes unitários com testcontainer para testar a persistência do banco de dados.
+- Integração com MinIO para upload de imagens.
+- Notificação via websocket.
 
