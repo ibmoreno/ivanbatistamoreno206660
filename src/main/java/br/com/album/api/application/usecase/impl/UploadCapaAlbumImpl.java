@@ -25,20 +25,20 @@ public class UploadCapaAlbumImpl implements UploadCapaAlbum {
     private String bucket;
 
     @Override
-    public List<CapaAlbumResponse> execute(Long id, List<InputStream> capas) {
+    public List<CapaAlbumResponse> execute(Long idAlbum, List<InputStream> capas) {
 
         if (capas == null || capas.isEmpty()) {
             return List.of();
         }
 
-        albumRepository.findById(id)
+        albumRepository.findById(idAlbum)
                 .orElseThrow(() -> new NotFoundException("Not Found Album"));
 
         List<CapaAlbumResponse> capaAlbumResponses = new ArrayList<>();
         for (InputStream capaAlbum : capas) {
             String objectId = minioRepository.uploadFile(capaAlbum, bucket);
             CapaAlbumEntity capaAlbumEntity = CapaAlbumEntity.builder()
-                    .idAlbum(id)
+                    .idAlbum(idAlbum)
                     .bucket(bucket)
                     .hash(objectId)
                     .build();
@@ -46,7 +46,7 @@ public class UploadCapaAlbumImpl implements UploadCapaAlbum {
             String url = minioRepository.getUrlFile(objectId, bucket);
             capaAlbumResponses.add(CapaAlbumResponse.builder()
                     .id(capaAlbumEntity.getId())
-                    .idAlbum(id)
+                    .idAlbum(idAlbum)
                     .url(url)
                     .build());
         }

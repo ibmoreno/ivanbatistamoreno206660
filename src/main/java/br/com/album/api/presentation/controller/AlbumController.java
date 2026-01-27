@@ -101,4 +101,12 @@ public class AlbumController {
         }
     }
 
+    @Operation(summary = "Lista capas de um album")
+    @ApiResponse(responseCode = "200", description = "Capas de um album retornados com sucesso")
+    @GetMapping("/{id}/capa")
+    public ResponseEntity<List<CapaAlbumResponse>> getCapa(@PathVariable Long id) {
+            List<CapaAlbumResponse> response = albumService.getCapa(id);
+            return ResponseEntity.ok(response);
+    }
+
 }

@@ -4,6 +4,7 @@ import br.com.album.api.application.service.AlbumService;
 import br.com.album.api.application.usecase.CreateAlbum;
 import br.com.album.api.application.usecase.FindAllAlbum;
 import br.com.album.api.application.usecase.GetAlbumById;
+import br.com.album.api.application.usecase.GetCapaAlbum;
 import br.com.album.api.application.usecase.UpdateAlbum;
 import br.com.album.api.application.usecase.UploadCapaAlbum;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
@@ -27,6 +28,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final GetAlbumById getAlbumById;
     private final UpdateAlbum updateAlbum;
     private final UploadCapaAlbum uploadCapaAlbum;
+    private final GetCapaAlbum getCapaAlbum;
 
     @Override
     public Page<AlbumResponse> findAll(FindAllAlbumRequest findAllAlbumRequest, Pageable pageable) {
@@ -49,7 +51,12 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<CapaAlbumResponse> uploadCapa(Long id, List<InputStream> capas) {
-        return uploadCapaAlbum.execute(id, capas);
+    public List<CapaAlbumResponse> uploadCapa(Long idAlbum, List<InputStream> capas) {
+        return uploadCapaAlbum.execute(idAlbum, capas);
+    }
+
+    @Override
+    public List<CapaAlbumResponse> getCapa(Long idAlbum) {
+        return getCapaAlbum.execute(idAlbum);
     }
 }

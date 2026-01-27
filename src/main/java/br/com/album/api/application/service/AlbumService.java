@@ -20,5 +20,7 @@ public interface AlbumService {
 
     AlbumResponse update(Long id, UpdateAlbumRequest updateAlbumRequest);
 
-    List<CapaAlbumResponse> uploadCapa(Long id, List<InputStream> capas);
+    List<CapaAlbumResponse> uploadCapa(Long idAlbum, List<InputStream> capas);
+
+    List<CapaAlbumResponse> getCapa(Long idAlbum);
 }

@@ -22,7 +22,7 @@ public class AlbumEntity {
     @Column(name = "titulo", nullable = false, length = 300)
     private String titulo;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "artista_album",
             joinColumns = @JoinColumn(name = "id_album"),
             inverseJoinColumns = @JoinColumn(name = "id_artista")

@@ -9,6 +9,7 @@ import io.minio.PutObjectArgs;
 import io.minio.http.Method;
 import java.io.InputStream;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public interface MinioRepository {
 @RequiredArgsConstructor
 class MinioRepositoryImpl implements MinioRepository {
 
-    private static final int EXPIRY_SECONDS = 300;
+    private static final int EXPIRY_VALUE_MINUTES = 30;
     private final MinioClient minioClient;
 
     @Override
@@ -59,7 +60,7 @@ class MinioRepositoryImpl implements MinioRepository {
                             .method(Method.GET)
                             .bucket(bucketName)
                             .object(objectId)
-                            .expiry(EXPIRY_SECONDS)
+                            .expiry(EXPIRY_VALUE_MINUTES, TimeUnit.MINUTES)
                             .build());
 
         } catch (Exception e) {
