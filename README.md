@@ -9,12 +9,25 @@
 
 API REST para disponibilizar dados referentes à artistas e álbuns.
 
+### Pre-requisitos
+
+- [Java 21 (openjdk-21.0.2)](https://jdk.java.net/archive/)
+- [Maven (3.9.11)](https://maven.apache.org/docs/3.9.11/release-notes.html)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Mise](https://mise.jdx.dev/dev-tools/)
+
 ### Execução em docker compose
 
 Para executar a API, execute o seguinte comando:
 
 ```bash
 docker compose up -d
+```
+
+Para verificar os logs dos serviços levantados.
+```bash
+docker compose logs
 ```
 
 ### Variáveis de Ambiente
@@ -58,13 +71,6 @@ Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
 * [Open API Definition - JSON Format](http://localhost:8080/v3/api-docs)
 * [Open API Definition - Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
-### Exemplos de Requisições:
-
-- Listar Albuns
-
-```shell
-curl --location 'http://localhost:8080/api/v1/album?size=10&page=0&sort=titulo%2CDESC'
-```
 
 ## Recursos de Monitoramento
 
@@ -73,4 +79,26 @@ Recursos disponíveis para monitoramento da aplicação.
 * [Health Checks Endpoint](http://localhost:8080/actuator/health)
 * [Liveness Endpoint](http://localhost:8080/actuator/health/liveness)
 * [Readiness Endpoint](http://localhost:8080/actuator/health/readiness)
+
+## Referências e Documentações
+
+Para referência adicional do framework utilizado para desenvolvimento, considere as seguintes seções:
+
+* [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#data.sql.jpa-and-spring-data)
+* [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#using.devtools)
+* [Spring Boot Actuator Web API](https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/)
+* [Validation](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#io.validation)
+* [OpenAPI Specification](https://swagger.io/specification/)
+* [Flyway migration](https://documentation.red-gate.com/home)
+
+## Histórico da Versão
+
+Foi implementado todos os requisitos descritos no edital, em destaque:
+
+- Implementação de tratamento de erros personalizado.
+- Swagger para documentação da API.
+- Health Checks para monitoramento da aplicação, Liveness e Readiness.
+- Uso de Flyway para controle de versão do banco de dados.
+- Testes unitários com testcontainer para testar a persistência do banco de dados.
 
