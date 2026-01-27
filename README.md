@@ -104,6 +104,7 @@ Para verificar os logs do serviço minIO
 ```bash
 docker compose logs minio
 ```
+ 
 
 ### Notificação via websocket
 
@@ -150,4 +151,5 @@ Foi implementado todos os requisitos descritos no edital, em destaque:
 - Testes unitários com testcontainer para testar a persistência do banco de dados.
 - Integração com MinIO para upload de imagens.
 - Notificação via websocket.
+- Rate Limiting para limitar o número de requisições por usuário.
 
