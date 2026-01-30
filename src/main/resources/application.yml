@@ -64,3 +64,6 @@ minio:
 regional:
   api:
     base-url: ${REGIONAL_API_URL:https://integrador-argus-api.geia.vip}
+
+jwt:
+  secret: ${JWT_SECRET:153aa337d85a9a38270a4bf519e87dbda4d353f77e6aa345b6965556dc10d9bc}
