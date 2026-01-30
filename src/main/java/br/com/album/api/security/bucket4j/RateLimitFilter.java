@@ -9,6 +9,9 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,21 +26,24 @@ public class RateLimitFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return matcher.match("/actuator/**", path);
+        return !matcher.match("/api/v1/**", path);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        /**
-         * TODO: implementar com JWT authentication
-         * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-         * String userId = auth.getName(); // subject do JWT
-         */
-        String clientIp = request.getRemoteAddr();
-        Bucket bucket = rateLimitService.getBucket(clientIp);
+        Bucket bucket;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            String clientUserName = auth.getName();
+            bucket = rateLimitService.getBucket(clientUserName);
+        } else {
+            String clientIp = request.getRemoteAddr();
+            bucket = rateLimitService.getBucket(clientIp);
+        }
+
         if (bucket.tryConsume(NUM_TOKENS)) {
             filterChain.doFilter(request, response);
         } else {
