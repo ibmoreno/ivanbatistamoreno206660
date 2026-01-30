@@ -128,6 +128,26 @@ Recursos disponíveis para monitoramento da aplicação.
 * [Liveness Endpoint](http://localhost:8080/actuator/health/liveness)
 * [Readiness Endpoint](http://localhost:8080/actuator/health/readiness)
 
+## Histórico da Versão 1.0
+
+Foi implementado todos os requisitos descritos no edital, em destaque:
+
+- Health Checks para monitoramento da aplicação, Liveness e Readiness.
+- Swagger para documentação da API.
+- Uso de Flyway para controle de versão do banco de dados.
+- Integração com MinIO para armazenamentos de imagens do albums.
+- Testes unitários
+- Notificação via websocket.
+- Rate Limiting para limitar o número de requisições por usuário.
+- Endpoint para Pesquisa de Algum e Artista.
+- Endpoint para upload de imagem do album.
+- Endpoints para sincronização de regionais.
+
+Destaques:
+- Implementação de tratamento de erros personalizado.
+- Uso de testcontainer para testes de persistência com banco de dados PostgreSQL.
+
+
 ## Referências e Documentações
 
 Para referência adicional do framework utilizado para desenvolvimento, considere as seguintes seções:
@@ -139,17 +159,3 @@ Para referência adicional do framework utilizado para desenvolvimento, consider
 * [Validation](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#io.validation)
 * [OpenAPI Specification](https://swagger.io/specification/)
 * [Flyway migration](https://documentation.red-gate.com/home)
-
-## Histórico da Versão
-
-Foi implementado todos os requisitos descritos no edital, em destaque:
-
-- Implementação de tratamento de erros personalizado.
-- Swagger para documentação da API.
-- Health Checks para monitoramento da aplicação, Liveness e Readiness.
-- Uso de Flyway para controle de versão do banco de dados.
-- Testes unitários com testcontainer para testar a persistência do banco de dados.
-- Integração com MinIO para upload de imagens.
-- Notificação via websocket.
-- Rate Limiting para limitar o número de requisições por usuário.
-
