@@ -60,3 +60,7 @@ minio:
   accessKey: ${MINIO_ACCESS_KEY:ROOTNAME}
   secretKey: ${MINIO_SECRET_KEY:ROOTPASSWORD}
   bucketName: ${MINIO_BUCKET_NAME:image-bucket}
+
+regional:
+  api:
+    base-url: ${REGIONAL_API_URL:https://integrador-argus-api.geia.vip}
