@@ -11,21 +11,20 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SynchronizeRegionaisImpl implements SynchronizeRegionais {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final RegionalRepository repository;
     private final RegionalClient regionalClient;
 
     @Override
     public void execute() {
 
-        logger.info("Iniciando sincronização de regionais");
+        log.info("Iniciando sincronização de regionais");
         List<RegionalResponse> regionaisEndpoint = regionalClient.getRegionais();
         if (regionaisEndpoint.isEmpty()) return;
 
@@ -53,9 +52,9 @@ public class SynchronizeRegionaisImpl implements SynchronizeRegionais {
         regionaisAtivasDB.forEach(regionalEntity ->
                 this.inativaRegionalNaoDisponivelNoEndpoint(regionalEntity, regionaisEndpointIds));
 
-        logger.info("Sincronização de regionais concluída");
+        log.info("Sincronização de regionais concluída");
 
-   }
+    }
 
     private void inativaRegionalNaoDisponivelNoEndpoint(RegionalEntity regional, Set<Integer> idsRegionalEndpoint) {
         if (!idsRegionalEndpoint.contains(regional.getIdExterno())) {
