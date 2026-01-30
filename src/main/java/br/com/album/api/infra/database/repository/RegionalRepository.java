@@ -1,0 +1,11 @@
+package br.com.album.api.infra.database.repository;
+
+import br.com.album.api.infra.database.jpa.RegionalEntity;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RegionalRepository extends JpaRepository<RegionalEntity, Long> {
+    List<RegionalEntity> findByAtivoTrue();
+}
