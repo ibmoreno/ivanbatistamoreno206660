@@ -1,0 +1,25 @@
+package br.com.album.api.configuration;
+
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@OpenAPIDefinition(
+        security = @SecurityRequirement(name = "barerAuth"),
+        info = @Info(title = "Open API Definition",
+                version = "1.0.0",
+                description = "API REST - Artistas e Álbuns")
+)
+@SecurityScheme(
+        name = "barerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
+public class OpenApiConfig {
+}
