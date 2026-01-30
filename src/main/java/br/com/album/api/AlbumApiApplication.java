@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @OpenAPIDefinition(info = @Info(title = "Open API Definition", version = "1.0.0", description = "API REST - Artistas e Álbuns"))
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
+@EnableAsync
 @SpringBootApplication
 public class AlbumApiApplication {
 

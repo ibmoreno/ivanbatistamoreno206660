@@ -21,6 +21,7 @@ public class UpdateAlbumRequest {
     @NotNull(message = "Titulo do album é obrigatório")
     private String titulo;
 
+    @Builder.Default
     @Schema(description = "Artistas do album", example = "Artista 1")
     @NotEmpty(message = "Artistas do album é obrigatório")
     private Set<UpdateArtistaRequest> artistas = new HashSet<>();

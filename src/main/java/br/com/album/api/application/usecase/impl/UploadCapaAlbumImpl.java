@@ -3,6 +3,7 @@ package br.com.album.api.application.usecase.impl;
 import br.com.album.api.application.usecase.UploadCapaAlbum;
 import br.com.album.api.exception.NotFoundException;
 import br.com.album.api.infra.bucket.MinioRepository;
+import br.com.album.api.infra.database.jpa.AlbumEntity;
 import br.com.album.api.infra.database.jpa.CapaAlbumEntity;
 import br.com.album.api.infra.database.repository.AlbumRepository;
 import br.com.album.api.infra.database.repository.CapaAlbumRepository;
@@ -31,14 +32,14 @@ public class UploadCapaAlbumImpl implements UploadCapaAlbum {
             return List.of();
         }
 
-        albumRepository.findById(idAlbum)
+        AlbumEntity albumEntity = albumRepository.findById(idAlbum)
                 .orElseThrow(() -> new NotFoundException("Not Found Album"));
 
         List<CapaAlbumResponse> capaAlbumResponses = new ArrayList<>();
         for (InputStream capaAlbum : capas) {
             String objectId = minioRepository.uploadFile(capaAlbum, bucket);
             CapaAlbumEntity capaAlbumEntity = CapaAlbumEntity.builder()
-                    .idAlbum(idAlbum)
+                    .album(albumEntity)
                     .bucket(bucket)
                     .hash(objectId)
                     .build();

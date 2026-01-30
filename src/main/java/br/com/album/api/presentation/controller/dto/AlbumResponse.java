@@ -18,4 +18,6 @@ public class AlbumResponse {
     private String titulo;
     @Schema(description = "Artistas do album", example = "Michel Teló")
     private Set<ArtistaResponse> artistas;
+    @Schema(description = "url da capa do album")
+    private String urlCapa;
 }

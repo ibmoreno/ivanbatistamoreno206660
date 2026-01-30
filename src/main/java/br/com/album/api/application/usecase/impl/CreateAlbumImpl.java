@@ -10,12 +10,15 @@ import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CreateAlbumImpl implements CreateAlbum {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AlbumRepository albumRepository;
     private final ApplicationEventPublisher eventPublisher;
     @Override
@@ -29,6 +32,7 @@ public class CreateAlbumImpl implements CreateAlbum {
                         .collect(Collectors.toSet()))
                 .build();
         AlbumEntity savedAlbumEntity = albumRepository.save(albumEntity);
+        logger.info("Album criado com sucesso: {}", savedAlbumEntity);
         eventPublisher.publishEvent(new AlbumEvent(savedAlbumEntity));
         return AlbumAdapter.convertToResponse(savedAlbumEntity);
     }

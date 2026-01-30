@@ -2,9 +2,12 @@ package br.com.album.api.infra.database.jpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +26,9 @@ public class CapaAlbumEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_album", nullable = false)
-    private Long idAlbum;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_album", nullable = false)
+    private AlbumEntity album;
 
     @Column(name = "bucket", nullable = false, length = 50)
     private String bucket;

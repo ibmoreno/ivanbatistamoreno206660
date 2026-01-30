@@ -1,6 +1,8 @@
 package br.com.album.api.infra.database.jpa;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +30,9 @@ public class AlbumEntity {
             inverseJoinColumns = @JoinColumn(name = "id_artista")
     )
     private Set<ArtistaEntity> artistas;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    private List<CapaAlbumEntity> capaAlbum = new ArrayList<>();
 
 }
