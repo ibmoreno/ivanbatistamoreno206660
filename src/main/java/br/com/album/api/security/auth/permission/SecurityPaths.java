@@ -1,25 +1,25 @@
-package br.com.album.api.security.auth.configuration;
+package br.com.album.api.security.auth.permission;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityPaths {
-    protected static final String[] WEBSOCKET = {
+    public static final String[] WEBSOCKET = {
             "/ws/**"
     };
-    protected static final String[] AUTHENTICATION = {
+    public static final String[] AUTHENTICATION = {
             "/api/v1/auth/**"
     };
-    protected static final String[] ACTUATOR = {
+    public static final String[] ACTUATOR = {
             "/actuator/**"
     };
-    protected static final String[] SWAGGER_UI = {
+    public static final String[] SWAGGER_UI = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"
     };
-    protected static final String[] STATIC_FILES = {
+    public static final String[] STATIC_FILES = {
             "/",
             "/favicon.ico",
             "/index.html",
