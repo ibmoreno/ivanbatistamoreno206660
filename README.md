@@ -104,7 +104,6 @@ Para verificar os logs do serviço minIO
 ```bash
 docker compose logs minio
 ```
- 
 
 ### Notificação via websocket
 
@@ -113,6 +112,16 @@ Notificação quando um novo album é cadastrado: [acompanhe aqui](http://localh
 ![WEBSOCKET](./assets/web-socket-notification.png)
 
 ### Documentação dos Recursos
+
+>[!NOTE]
+> ️NOTA: As chamas para algumas APIs são protegidas por segurança, os usuários devem ser autenticados no
+>endpoint /api/v1/auth/login, conforme o exemplo abaixo:
+
+```shell
+curl --location 'http://localhost:8080/api/v1/auth/login' \
+--form 'username="user"' \
+--form 'password="user123"'
+```
 
 Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.
 
@@ -148,7 +157,7 @@ Destaques:
 - Uso de testcontainer para testes de persistência com banco de dados PostgreSQL.
 
 
-## Referências e Documentações
+## 💡 Referências e Documentações
 
 Para referência adicional do framework utilizado para desenvolvimento, considere as seguintes seções:
 
