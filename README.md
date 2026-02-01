@@ -119,8 +119,11 @@ Notificação quando um novo album é cadastrado: [acompanhe aqui](http://localh
 
 ```shell
 curl --location 'http://localhost:8080/api/v1/auth/login' \
---form 'username="user"' \
---form 'password="user123"'
+--header 'Content-Type: application/json' \
+--data '{
+    "username": "user",
+    "password": "user123"
+}'
 ```
 
 Veja os recursos da API disponíveis sobre artistas e álbuns na documentação.

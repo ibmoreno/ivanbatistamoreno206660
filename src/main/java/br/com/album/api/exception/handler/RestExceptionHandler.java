@@ -2,11 +2,13 @@ package br.com.album.api.exception.handler;
 
 import br.com.album.api.exception.NotFoundException;
 import br.com.album.api.exception.ResponseError;
+import br.com.album.api.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,6 +59,16 @@ public class RestExceptionHandler {
                 .build();
 
         return ResponseEntity.badRequest().body(responseError);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseError> handleBadCredentialsException(BadCredentialsException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ResponseError> handleUnauthorizedException(UnauthorizedException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex);
     }
 
     @ExceptionHandler(Exception.class)

@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-class JwtTokenServiceImpl implements JwtTokenService {
+public class JwtTokenServiceImpl implements JwtTokenService {
 
     private static final Duration EXPIRATION = Duration.ofMinutes(5);
 

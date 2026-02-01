@@ -1,7 +1,6 @@
 package br.com.album.api.security.auth.configuration;
 
 
-import br.com.album.api.security.auth.filters.JwtAuthenticationFilter;
 import br.com.album.api.security.auth.permission.SecurityPaths;
 import br.com.album.api.security.auth.service.JwtTokenService;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,8 +30,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   JwtTokenService jwtTokenService,
-                                                   AuthenticationManager authenticationManager) throws Exception {
+                                                   JwtTokenService jwtTokenService) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SecurityPaths.AUTHENTICATION).permitAll()
@@ -46,9 +43,7 @@ public class SecurityConfiguration {
                         oauth.jwt(jwt -> jwt.decoder(jwtTokenService.getJwtDecoder()))
                 )
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtTokenService),
-                        UsernamePasswordAuthenticationFilter.class);
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
 

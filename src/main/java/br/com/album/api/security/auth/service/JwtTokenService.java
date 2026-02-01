@@ -10,4 +10,5 @@ public interface JwtTokenService {
     JwtDecoder getJwtDecoder();
 
     JwtEncoder getJwtEncoder();
+
 }
