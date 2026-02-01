@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        security = @SecurityRequirement(name = "barerAuth"),
         info = @Info(title = "Open API Definition",
                 version = "1.0.0",
                 description = "API REST - Artistas e Álbuns")

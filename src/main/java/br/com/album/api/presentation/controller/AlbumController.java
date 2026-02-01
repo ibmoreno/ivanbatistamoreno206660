@@ -9,6 +9,7 @@ import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.InputStream;
@@ -43,7 +44,7 @@ public class AlbumController {
 
     private final AlbumService albumService;
 
-    @Operation(summary = "Lista todos os albums")
+    @Operation(summary = "Lista todos os albums", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Albums listados com sucesso")
     @GetMapping
     public ResponseEntity<Page<AlbumResponse>> findAll(@ParameterObject FindAllAlbumRequest findAllAlbumRequest,
@@ -53,7 +54,7 @@ public class AlbumController {
         return ResponseEntity.ok(responses);
     }
 
-    @Operation(summary = "Busca um album por ID")
+    @Operation(summary = "Busca um album por ID", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Album encontrado com sucesso")
     @GetMapping("/{id}")
     public ResponseEntity<AlbumResponse> findById(@PathVariable Long id) {
@@ -61,7 +62,7 @@ public class AlbumController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Cria um album juntamente com os artistas")
+    @Operation(summary = "Cria um album juntamente com os artistas", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "201", description = "Album criado com sucesso")
     @PostMapping
     public ResponseEntity<AlbumResponse> create(@Valid @RequestBody CreateAlbumRequest createAlbumRequest) {
@@ -76,7 +77,7 @@ public class AlbumController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @Operation(summary = "Atualiza dados de um album juntamente com os artistas")
+    @Operation(summary = "Atualiza dados de um album juntamente com os artistas", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Album atualizado com sucesso")
     @PutMapping("/{id}")
     public ResponseEntity<AlbumResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateAlbumRequest updateAlbumRequest) {
@@ -84,7 +85,7 @@ public class AlbumController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Upload de capas de um album")
+    @Operation(summary = "Upload de capas de um album", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Capas de um album carregadas com sucesso")
     @PostMapping("/{id}/capa")
     public ResponseEntity<List<CapaAlbumResponse>> uploadCapa(@PathVariable Long id,
@@ -101,7 +102,7 @@ public class AlbumController {
         }
     }
 
-    @Operation(summary = "Lista capas de um album")
+    @Operation(summary = "Lista capas de um album", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Capas de um album retornados com sucesso")
     @GetMapping("/{id}/capa")
     public ResponseEntity<List<CapaAlbumResponse>> getCapa(@PathVariable Long id) {

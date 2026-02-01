@@ -4,6 +4,7 @@ import br.com.album.api.application.service.ArtistaService;
 import br.com.album.api.presentation.controller.dto.ArtistaAlbumResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -25,7 +26,7 @@ public class ArtistaController {
 
     private final ArtistaService artistaService;
 
-    @Operation(summary = "Lista Artista com os seus albuns")
+    @Operation(summary = "Lista Artista com os seus albuns", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Artistas listados com sucesso")
     @GetMapping
     public ResponseEntity<Page<ArtistaAlbumResponse>> findArtistaByName(@RequestParam(required = false) String nome,
