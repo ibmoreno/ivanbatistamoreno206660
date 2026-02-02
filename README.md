@@ -13,11 +13,11 @@ API REST para disponibilizar dados referentes à artistas e álbuns.
 
 - [Java 21 (openjdk-21.0.2)](https://jdk.java.net/archive/)
 - [Maven (3.9.11)](https://maven.apache.org/docs/3.9.11/release-notes.html)
-- [Docker](https://www.docker.com/)
+- [Docker Desktop](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Mise tools (opcional)](https://mise.jdx.dev/dev-tools/)
 
-### Execução em docker compose
+### Execução com docker compose
 
 Para executar a API, execute o seguinte comando docker:
 
@@ -30,29 +30,45 @@ Para verificar os logs dos serviços levantados.
 docker compose logs
 ```
 
+Finalizar a execução do projeto
+```bash
+docker compose down
+```
+
 ### Variáveis de Ambiente
 
 As variáveis de ambiente necessárias para a execução da API estão no arquivo .env
 
-| Variável | Descrição                                   |
-| --- |---------------------------------------------|
-| JDBC_POSTGRES_URL| URL de conexão com banco de dados           |
-| JDBC_POSTGRES_USER| Usuário de conexão com banco de dados       |
-| JDBC_POSTGRES_PASSWORD| Senha de conexão com banco de dados         |
-| HIBERNATE_SHOW_SQL| Mostra as queries SQL no console            |
-| HIBERNATE_FORMAT_SQL| Formata as queries SQL no console           |
-| SPRINGDOC_API_DOCS_ENABLED| Habilita a documentação da API              |
-| SPRINGDOC_SWAGGER_UI_ENABLED| Habilita a interface de documentação da API |
-| POSTGRES_DB| Nome do banco de dados                      |
-| POSTGRES_USER| Usuário de conexão com banco de dados       |
-| POSTGRES_PASSWORD| Senha de conexão com banco de dados         |
-| MINIO_USER| Usuário de acesso ao console do MinIO       |
-| MINIO_PASSWORD| Senha de acesso ao console do MinIO          |
-| MINIO_ENDPOINT| Endereço do MinIO                           |
-| MINIO_BUCKET_NAME| Nome do bucket do MinIO                     |
-| MINIO_ACCESS_KEY| Chave de acesso do MinIO                    |
-| MINIO_SECRET_KEY| Chave secreta do MinIO                      |
+| Variável                     | Descrição                                         |
+|------------------------------|---------------------------------------------------|
+| JDBC_POSTGRES_URL            | URL de conexão com banco de dados                 |
+| JDBC_POSTGRES_USER           | Usuário de conexão com banco de dados             |
+| JDBC_POSTGRES_PASSWORD       | Senha de conexão com banco de dados               |
+| HIBERNATE_SHOW_SQL           | Mostra as queries SQL no console                  |
+| HIBERNATE_FORMAT_SQL         | Formata as queries SQL no console                 |
+| SPRINGDOC_API_DOCS_ENABLED   | Habilita a documentação da API                    |
+| SPRINGDOC_SWAGGER_UI_ENABLED | Habilita a interface de documentação da API       |
+| POSTGRES_URL                 | URL conexão com o banco de dados para docker-compose |
+| POSTGRES_DB                  | Nome do banco de dados para docker-compose        |
+| POSTGRES_USER                | Usuário de conexão com banco de dados para docker-compose |
+| POSTGRES_PASSWORD            | Senha de conexão com banco de dados para docker-compose |
+| MINIO_USER                   | Usuário de acesso ao console do MinIO             |
+| MINIO_PASSWORD               | Senha de acesso ao console do MinIO               |
+| MINIO_ENDPOINT               | Endereço do MinIO                                 |
+| MINIO_BUCKET_NAME            | Nome do bucket do MinIO                           |
+| MINIO_ACCESS_KEY             | Chave de acesso do MinIO                          |
+| MINIO_SECRET_KEY             | Chave secreta do MinIO                            |
 
+
+Executando o projeto via maven
+```bash
+mvn spring-boot:run
+```
+
+Executando os teste do projeto
+```bash
+mvn test
+```
 
 ### Banco de Dados PostgreSQL
 
@@ -105,7 +121,7 @@ Para verificar os logs do serviço minIO
 docker compose logs minio
 ```
 
-### Notificação via websocket
+### 🔔 Notificação via websocket
 
 Notificação quando um novo album é cadastrado: [acompanhe aqui](http://localhost:8080).
 
@@ -140,7 +156,7 @@ Recursos disponíveis para monitoramento da aplicação.
 * [Liveness Endpoint](http://localhost:8080/actuator/health/liveness)
 * [Readiness Endpoint](http://localhost:8080/actuator/health/readiness)
 
-## Histórico da Versão 1.0
+## 📦 Histórico da Versão 1.0
 
 Foi implementado todos os requisitos descritos no edital, em destaque:
 

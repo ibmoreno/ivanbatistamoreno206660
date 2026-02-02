@@ -1,0 +1,508 @@
+{
+  "info": {
+    "_postman_id": "33d97b85-ad53-43e7-9d53-1e82f79bf0cd",
+    "name": "ivanbatistamoreno",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "377235"
+  },
+  "item": [
+    {
+      "name": "album",
+      "item": [
+        {
+          "name": "Upload Capa Album",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpdmFuYmF0aXN0YW1vcmVubzIwNjY2MC1hcGkiLCJzdWIiOiJ1c2VyIiwiZXhwIjoxNzY5OTcyMjg1LCJpYXQiOjE3Njk5NzE5ODUsInVzZXJJZCI6IjEiLCJyb2xlcyI6WyJST0xFX1VTRVJfUk9MRSJdfQ.f76LZB9R_BBQxFbeUH6ybstyQtUUs82qhX3qvvb_GlI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "829a4e1c-f0e9-49f8-8257-5c48e0a38654",
+                  "src": "/C:/Users/ibmor/Downloads/capa-album/3cover17.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album/3/capa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album",
+                "3",
+                "capa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Album",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"Black Album\",\r\n    \"artistas\": [\r\n        {\r\n            \"nome\": \"Metallica\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Album",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"titulo\": \"Back in Black (1980)\",\r\n    \"artistas\": [\r\n        {\r\n            \"nome\": \"AC/DC\"\r\n        }\r\n    ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/album",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "album"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Location",
+                  "value": "http://localhost:8080/api/v1/album/14"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 27 Jan 2026 14:06:12 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 14,\n    \"titulo\": \"Back in Black (1980)\",\n    \"artistas\": [\n        {\n            \"id\": 5,\n            \"nome\": \"AC/DC\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Album",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 17,\r\n    \"titulo\": \"Back in Black (1980)\",\r\n    \"artistas\": [\r\n        {\r\n            \"id\": 8,\r\n            \"nome\": \"AC/DC\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album/17",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album",
+                "17"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Capa Album",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpdmFuYmF0aXN0YW1vcmVubzIwNjY2MC1hcGkiLCJzdWIiOiJ1c2VyIiwiZXhwIjoxNzY5OTcyMjg1LCJpYXQiOjE3Njk5NzE5ODUsInVzZXJJZCI6IjEiLCJyb2xlcyI6WyJST0xFX1VTRVJfUk9MRSJdfQ.f76LZB9R_BBQxFbeUH6ybstyQtUUs82qhX3qvvb_GlI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album/1/capa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album",
+                "1",
+                "capa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Album",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpdmFuYmF0aXN0YW1vcmVubzIwNjY2MC1hcGkiLCJzdWIiOiJ1c2VyIiwiZXhwIjoxNzY5ODEzOTI5LCJpYXQiOjE3Njk4MTM2MjksInVzZXJJZCI6IjEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXX0.C3jULggwrSQ1_rRT8VfBDLY7MTxLbWFlFjay-fNsNx8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album?size=10&page=0&sort=titulo,DESC",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "sort",
+                  "value": "titulo,DESC"
+                },
+                {
+                  "key": "titulo",
+                  "value": "Where",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "artistaId",
+                  "value": "2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get  Album by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/album/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "album",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "artista",
+      "item": [
+        {
+          "name": "Get All Artista",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/artista?size=10&page=0&sort=nome,ASC&nome=Guns N’ Roses",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "artista"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "sort",
+                  "value": "nome,ASC"
+                },
+                {
+                  "key": "nome",
+                  "value": "Guns N’ Roses"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "regional",
+      "item": [
+        {
+          "name": "Get Capa Album Copy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/regional/sync",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "regional",
+                "sync"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"user123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"6b207919-2be4-4e3b-84a9-7b0bd2ae0b7d\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/refreshToken",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refreshToken"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Checks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "basic"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
