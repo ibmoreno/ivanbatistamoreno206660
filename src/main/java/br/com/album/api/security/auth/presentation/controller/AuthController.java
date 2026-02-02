@@ -1,9 +1,9 @@
-package br.com.album.api.presentation.controller;
+package br.com.album.api.security.auth.presentation.controller;
 
 
-import br.com.album.api.presentation.controller.dto.LoginRequest;
-import br.com.album.api.presentation.controller.dto.RefreshTokenRequest;
-import br.com.album.api.presentation.controller.dto.TokenResponse;
+import br.com.album.api.security.auth.presentation.controller.dto.LoginRequest;
+import br.com.album.api.security.auth.presentation.controller.dto.RefreshTokenRequest;
+import br.com.album.api.security.auth.presentation.controller.dto.TokenResponse;
 import br.com.album.api.security.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

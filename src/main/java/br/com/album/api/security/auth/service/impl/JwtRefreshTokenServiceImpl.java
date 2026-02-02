@@ -1,9 +1,9 @@
 package br.com.album.api.security.auth.service.impl;
 
 import br.com.album.api.exception.UnauthorizedException;
-import br.com.album.api.infra.database.jpa.RefreshTokenEntity;
-import br.com.album.api.infra.database.repository.RefreshTokenRepository;
-import br.com.album.api.presentation.controller.dto.RefreshToken;
+import br.com.album.api.security.auth.infra.database.jpa.RefreshTokenEntity;
+import br.com.album.api.security.auth.infra.database.repository.RefreshTokenRepository;
+import br.com.album.api.security.auth.presentation.controller.dto.RefreshToken;
 import br.com.album.api.security.auth.service.JwtRefreshTokenService;
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package br.com.album.api.infra.database.jpa;
+package br.com.album.api.security.auth.infra.database.jpa;
 
 
 import jakarta.persistence.Column;

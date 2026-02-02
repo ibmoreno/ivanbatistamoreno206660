@@ -1,8 +1,8 @@
 package br.com.album.api.security.auth.service.impl;
 
 import br.com.album.api.exception.UnauthorizedException;
-import br.com.album.api.presentation.controller.dto.RefreshToken;
-import br.com.album.api.presentation.controller.dto.TokenResponse;
+import br.com.album.api.security.auth.presentation.controller.dto.RefreshToken;
+import br.com.album.api.security.auth.presentation.controller.dto.TokenResponse;
 import br.com.album.api.security.auth.service.AuthService;
 import br.com.album.api.security.auth.service.JwtRefreshTokenService;
 import br.com.album.api.security.auth.service.JwtTokenService;

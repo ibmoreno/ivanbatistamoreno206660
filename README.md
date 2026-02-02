@@ -158,7 +158,7 @@ Recursos disponíveis para monitoramento da aplicação.
 
 ## 📦 Histórico da Versão 1.0
 
-Foi implementado todos os requisitos descritos no edital, em destaque:
+Foi implementado todos os requisitos descritos no edital:
 
 - Health Checks para monitoramento da aplicação, Liveness e Readiness.
 - Swagger para documentação da API.
@@ -167,6 +167,8 @@ Foi implementado todos os requisitos descritos no edital, em destaque:
 - Testes unitários
 - Notificação via websocket.
 - Rate Limiting para limitar o número de requisições por usuário.
+- Autenticação via JWT.
+- Refresh Token para autenticação.
 - Endpoint para Pesquisa de Algum e Artista.
 - Endpoint para upload de imagem do album.
 - Endpoints para sincronização de regionais.

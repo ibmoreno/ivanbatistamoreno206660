@@ -1,6 +1,6 @@
 package br.com.album.api.security.auth.service;
 
-import br.com.album.api.presentation.controller.dto.TokenResponse;
+import br.com.album.api.security.auth.presentation.controller.dto.TokenResponse;
 
 public interface AuthService {
      TokenResponse login(String username, String password);

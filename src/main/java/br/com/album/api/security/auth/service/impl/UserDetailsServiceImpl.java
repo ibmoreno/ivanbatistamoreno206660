@@ -1,6 +1,6 @@
 package br.com.album.api.security.auth.service.impl;
 
-import br.com.album.api.infra.database.repository.UserRepository;
+import br.com.album.api.security.auth.infra.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package br.com.album.api.presentation.controller.dto;
+package br.com.album.api.security.auth.presentation.controller.dto;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

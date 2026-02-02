@@ -1,6 +1,6 @@
 package br.com.album.api.security.auth.service;
 
-import br.com.album.api.presentation.controller.dto.RefreshToken;
+import br.com.album.api.security.auth.presentation.controller.dto.RefreshToken;
 import java.util.Optional;
 
 public interface JwtRefreshTokenService {
