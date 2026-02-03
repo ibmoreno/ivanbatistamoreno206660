@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateArtistaRequest {
+    @Schema(description = "Id do artista, caso já exista", example = "1")
+    private Long id;
     @Schema(description = "Nome do artista", example = "Artista 1")
     @NotBlank(message = "Nome do artista é obrigatório")
     @NotNull(message = "Nome do artista é obrigatório")

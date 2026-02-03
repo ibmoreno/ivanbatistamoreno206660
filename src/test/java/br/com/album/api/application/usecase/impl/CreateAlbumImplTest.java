@@ -3,6 +3,7 @@ package br.com.album.api.application.usecase.impl;
 import br.com.album.api.application.usecase.CreateAlbum;
 import br.com.album.api.config.TestPostgreSQLContainer;
 import br.com.album.api.infra.database.repository.AlbumRepository;
+import br.com.album.api.infra.database.repository.ArtistaRepository;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.CreateArtistaRequest;
@@ -26,6 +27,9 @@ class CreateAlbumImplTest extends TestPostgreSQLContainer {
     @Autowired
     private AlbumRepository albumRepository;
 
+    @Autowired
+    private ArtistaRepository artistaRepository;
+
     @MockitoBean
     private ApplicationEventPublisher eventPublisher;
 
@@ -33,7 +37,7 @@ class CreateAlbumImplTest extends TestPostgreSQLContainer {
 
     @BeforeEach
     void setUp() {
-        createAlbum = new CreateAlbumImpl(albumRepository, eventPublisher);
+        createAlbum = new CreateAlbumImpl(albumRepository, artistaRepository, eventPublisher);
     }
 
     @Test
@@ -44,6 +48,7 @@ class CreateAlbumImplTest extends TestPostgreSQLContainer {
                 .builder()
                 .titulo("titulo")
                 .artistas(Set.of(CreateArtistaRequest.builder()
+                        .id(1L)
                         .nome("artista")
                         .build()))
                 .build();
