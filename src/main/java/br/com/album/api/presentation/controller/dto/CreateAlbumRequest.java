@@ -23,7 +23,7 @@ public class CreateAlbumRequest {
     private String titulo;
 
     @Builder.Default
-    @Schema(description = "Artistas do album", example = "Artista 1")
+    @Schema(description = "Artistas do album", example = "[{\"id\": 6, \"nome\": \"Michel\"}]", type = "array")
     @NotEmpty(message = "Artistas do album é obrigatório")
     private Set<CreateArtistaRequest> artistas = new HashSet<>();
 

@@ -16,7 +16,7 @@ public class AlbumResponse {
     private Long id;
     @Schema(description = "Titulo do album", example = "“Bem Sertanejo")
     private String titulo;
-    @Schema(description = "Artistas do album", example = "Michel Teló")
+    @Schema(description = "Artistas do album", example = "[{\"id\": 6, \"nome\": \"Michel\"}]", type = "array")
     private Set<ArtistaResponse> artistas;
     @Schema(description = "url da capa do album")
     private String urlCapa;

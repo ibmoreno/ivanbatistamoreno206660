@@ -8,6 +8,9 @@ import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -87,9 +90,12 @@ public class AlbumController {
 
     @Operation(summary = "Upload de capas de um album", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Capas de um album carregadas com sucesso")
-    @PostMapping("/{id}/capa")
+    @PostMapping(value = "/{id}/capa", consumes = "multipart/form-data")
     public ResponseEntity<List<CapaAlbumResponse>> uploadCapa(@PathVariable Long id,
-                                                              @Valid @RequestParam("files") MultipartFile[] files) {
+                                                              @Parameter(description = "Arquivos de imagem para upload",
+                                                                      required = true,
+                                                                      array = @ArraySchema(schema = @Schema(type = "string", format = "binary")))
+                                                              @Valid @RequestPart("files") MultipartFile[] files) {
         try {
             List<InputStream> capas = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -106,8 +112,8 @@ public class AlbumController {
     @ApiResponse(responseCode = "200", description = "Capas de um album retornados com sucesso")
     @GetMapping("/{id}/capa")
     public ResponseEntity<List<CapaAlbumResponse>> getCapa(@PathVariable Long id) {
-            List<CapaAlbumResponse> response = albumService.getCapa(id);
-            return ResponseEntity.ok(response);
+        List<CapaAlbumResponse> response = albumService.getCapa(id);
+        return ResponseEntity.ok(response);
     }
 
 }
