@@ -1,4 +1,4 @@
-package br.com.album.api.exception;
+package br.com.album.api.exception.dto;
 
 
 import java.time.LocalDateTime;

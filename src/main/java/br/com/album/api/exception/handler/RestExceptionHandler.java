@@ -1,7 +1,7 @@
 package br.com.album.api.exception.handler;
 
 import br.com.album.api.exception.NotFoundException;
-import br.com.album.api.exception.ResponseError;
+import br.com.album.api.exception.dto.ResponseError;
 import br.com.album.api.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 import java.util.Map;
