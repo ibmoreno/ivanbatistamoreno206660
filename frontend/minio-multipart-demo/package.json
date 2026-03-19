@@ -1,0 +1,9 @@
+{
+  "name": "minio-multipart-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo front-end para upload multipart de video direto no MinIO",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

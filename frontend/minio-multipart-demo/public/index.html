@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinIO Multipart Video Upload Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main class="page">
+    <section class="hero">
+        <p class="eyebrow">Demo Front-End</p>
+        <h1>Upload multipart de video direto no MinIO</h1>
+        <p class="hero-copy">
+            Exemplo completo com login, geração de URLs assinadas, envio em partes,
+            conclusão do upload e opção de abortar.
+        </p>
+    </section>
+
+    <section class="panel grid two-up">
+        <div>
+            <h2>Conexão</h2>
+            <label class="field">
+                <span>API Base URL</span>
+                <input id="apiBaseUrl" type="url" value="http://localhost:8080">
+            </label>
+            <label class="field">
+                <span>Usuário</span>
+                <input id="username" type="text" value="user">
+            </label>
+            <label class="field">
+                <span>Senha</span>
+                <input id="password" type="password" value="user123">
+            </label>
+            <div class="actions">
+                <button id="loginButton" class="button primary" type="button">Entrar e gerar token</button>
+                <button id="clearTokenButton" class="button ghost" type="button">Limpar token</button>
+            </div>
+            <p id="authStatus" class="status neutral">Ainda não autenticado.</p>
+        </div>
+
+        <div>
+            <h2>Upload</h2>
+            <label class="field">
+                <span>ID do álbum</span>
+                <input id="albumId" type="number" min="1" value="1">
+            </label>
+            <label class="field">
+                <span>Tamanho do chunk (MB)</span>
+                <input id="chunkSizeMb" type="number" min="5" value="10">
+            </label>
+            <label class="field">
+                <span>Vídeo</span>
+                <input id="videoFile" type="file" accept="video/*">
+            </label>
+            <div class="actions">
+                <button id="uploadButton" class="button primary" type="button">Iniciar upload</button>
+                <button id="abortButton" class="button danger" type="button" disabled>Abortar upload</button>
+            </div>
+            <p class="hint">Dica: use partes de no mínimo 5 MB, exceto a última.</p>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <h2>Progresso</h2>
+            <span id="summaryText" class="summary">Nenhum upload iniciado.</span>
+        </div>
+        <div class="progress-shell" aria-hidden="true">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <div id="partList" class="part-list"></div>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <h2>Resposta final</h2>
+            <button id="copyResultButton" class="button ghost" type="button">Copiar JSON</button>
+        </div>
+        <pre id="resultBox" class="result-box">Nenhum resultado ainda.</pre>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <h2>Logs</h2>
+            <button id="clearLogsButton" class="button ghost" type="button">Limpar logs</button>
+        </div>
+        <div id="logBox" class="log-box"></div>
+    </section>
+</main>
+
+<script src="./app.js"></script>
+</body>
+</html>

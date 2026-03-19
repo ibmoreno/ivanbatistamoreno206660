@@ -1,10 +1,16 @@
 package br.com.album.api.presentation.controller;
 
 import br.com.album.api.application.service.AlbumService;
+import br.com.album.api.application.service.AlbumVideoUploadService;
 import br.com.album.api.exception.ApiServiceApplicationException;
 import br.com.album.api.presentation.controller.dto.AlbumResponse;
+import br.com.album.api.presentation.controller.dto.AbortVideoMultipartUploadResponse;
 import br.com.album.api.presentation.controller.dto.CapaAlbumResponse;
+import br.com.album.api.presentation.controller.dto.CompleteVideoMultipartUploadRequest;
+import br.com.album.api.presentation.controller.dto.CompleteVideoMultipartUploadResponse;
 import br.com.album.api.presentation.controller.dto.CreateAlbumRequest;
+import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadRequest;
+import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadResponse;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,9 +37,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,6 +54,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class AlbumController {
 
     private final AlbumService albumService;
+    private final AlbumVideoUploadService albumVideoUploadService;
 
     @Operation(summary = "Lista todos os albums", security = @SecurityRequirement(name = "barerAuth"))
     @ApiResponse(responseCode = "200", description = "Albums listados com sucesso")
@@ -113,6 +122,34 @@ public class AlbumController {
     @GetMapping("/{id}/capa")
     public ResponseEntity<List<CapaAlbumResponse>> getCapa(@PathVariable Long id) {
         List<CapaAlbumResponse> response = albumService.getCapa(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Inicia upload multipart de video no MinIO", security = @SecurityRequirement(name = "barerAuth"))
+    @ApiResponse(responseCode = "200", description = "Upload multipart iniciado com sucesso")
+    @PostMapping("/{id}/video/multipart")
+    public ResponseEntity<CreateVideoMultipartUploadResponse> createVideoMultipartUpload(@PathVariable Long id,
+                                                                                         @Valid @RequestBody CreateVideoMultipartUploadRequest request) {
+        CreateVideoMultipartUploadResponse response = albumVideoUploadService.createMultipartUpload(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Conclui upload multipart de video no MinIO", security = @SecurityRequirement(name = "barerAuth"))
+    @ApiResponse(responseCode = "200", description = "Upload multipart concluido com sucesso")
+    @PostMapping("/{id}/video/multipart/complete")
+    public ResponseEntity<CompleteVideoMultipartUploadResponse> completeVideoMultipartUpload(@PathVariable Long id,
+                                                                                             @Valid @RequestBody CompleteVideoMultipartUploadRequest request) {
+        CompleteVideoMultipartUploadResponse response = albumVideoUploadService.completeMultipartUpload(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Aborta upload multipart de video no MinIO", security = @SecurityRequirement(name = "barerAuth"))
+    @ApiResponse(responseCode = "200", description = "Upload multipart abortado com sucesso")
+    @DeleteMapping("/{id}/video/multipart")
+    public ResponseEntity<AbortVideoMultipartUploadResponse> abortVideoMultipartUpload(@PathVariable Long id,
+                                                                                       @RequestParam String objectKey,
+                                                                                       @RequestParam String uploadId) {
+        AbortVideoMultipartUploadResponse response = albumVideoUploadService.abortMultipartUpload(id, objectKey, uploadId);
         return ResponseEntity.ok(response);
     }
 
