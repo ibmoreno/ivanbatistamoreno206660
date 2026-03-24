@@ -5,6 +5,8 @@ import br.com.album.api.presentation.controller.dto.CompleteVideoMultipartUpload
 import br.com.album.api.presentation.controller.dto.CompleteVideoMultipartUploadResponse;
 import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadRequest;
 import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadResponse;
+import br.com.album.api.presentation.controller.dto.VideoUploadResponse;
+import java.util.List;
 
 public interface AlbumVideoUploadService {
     CreateVideoMultipartUploadResponse createMultipartUpload(Long idAlbum, CreateVideoMultipartUploadRequest request);
@@ -12,4 +14,6 @@ public interface AlbumVideoUploadService {
     CompleteVideoMultipartUploadResponse completeMultipartUpload(Long idAlbum, CompleteVideoMultipartUploadRequest request);
 
     AbortVideoMultipartUploadResponse abortMultipartUpload(Long idAlbum, String objectKey, String uploadId);
+
+    List<VideoUploadResponse> listVideoUploads(Long idAlbum);
 }

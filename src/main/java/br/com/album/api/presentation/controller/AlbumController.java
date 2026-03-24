@@ -13,6 +13,7 @@ import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadRe
 import br.com.album.api.presentation.controller.dto.CreateVideoMultipartUploadResponse;
 import br.com.album.api.presentation.controller.dto.FindAllAlbumRequest;
 import br.com.album.api.presentation.controller.dto.UpdateAlbumRequest;
+import br.com.album.api.presentation.controller.dto.VideoUploadResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -150,6 +151,14 @@ public class AlbumController {
                                                                                        @RequestParam String objectKey,
                                                                                        @RequestParam String uploadId) {
         AbortVideoMultipartUploadResponse response = albumVideoUploadService.abortMultipartUpload(id, objectKey, uploadId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Lista uploads de video de um album", security = @SecurityRequirement(name = "barerAuth"))
+    @ApiResponse(responseCode = "200", description = "Uploads de video listados com sucesso")
+    @GetMapping("/{id}/video")
+    public ResponseEntity<List<VideoUploadResponse>> listVideoUploads(@PathVariable Long id) {
+        List<VideoUploadResponse> response = albumVideoUploadService.listVideoUploads(id);
         return ResponseEntity.ok(response);
     }
 

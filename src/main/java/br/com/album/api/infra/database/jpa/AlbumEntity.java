@@ -35,4 +35,8 @@ public class AlbumEntity {
     @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
     private List<CapaAlbumEntity> capaAlbum = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    private List<VideoUploadEntity> videoUploads = new ArrayList<>();
+
 }
