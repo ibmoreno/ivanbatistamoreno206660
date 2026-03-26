@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MinIO Multipart Video Upload Demo</title>
+    <title>MinIO Multipart Video Studio</title>
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 </head>
 <body>
 <main class="page">
     <section class="hero">
-        <p class="eyebrow">Demo Front-End</p>
-        <h1>Upload multipart de video direto no MinIO</h1>
+        <p class="eyebrow">Video Studio Demo</p>
+        <h1>Upload, processamento e playback em um só lugar</h1>
         <p class="hero-copy">
-            Exemplo completo com login, geração de URLs assinadas, envio em partes,
-            conclusão do upload e opção de abortar.
+            Faça upload multipart, acompanhe o processamento assíncrono e visualize thumbnail,
+            preview curto, variantes e manifesto DASH dos vídeos do álbum.
         </p>
     </section>
 
-    <section class="panel grid two-up">
+    <section class="panel grid three-up">
         <div>
             <h2>Conexão</h2>
             <label class="field">
@@ -57,19 +58,52 @@
                 <button id="uploadButton" class="button primary" type="button">Iniciar upload</button>
                 <button id="abortButton" class="button danger" type="button" disabled>Abortar upload</button>
             </div>
-            <p class="hint">Dica: use partes de no mínimo 5 MB, exceto a última.</p>
+            <p class="hint">Use partes de no mínimo 5 MB, exceto a última.</p>
+        </div>
+
+        <div>
+            <h2>Biblioteca</h2>
+            <p class="hint">
+                Busque os vídeos processados do álbum, veja o status do pipeline e abra o player adaptativo.
+            </p>
+            <div class="actions stack">
+                <button id="loadVideosButton" class="button primary" type="button">Carregar vídeos do álbum</button>
+                <button id="autoRefreshButton" class="button ghost" type="button">Ativar auto refresh</button>
+            </div>
+            <p id="libraryStatus" class="status neutral">Nenhuma consulta executada.</p>
         </div>
     </section>
 
     <section class="panel">
         <div class="section-heading">
-            <h2>Progresso</h2>
+            <h2>Progresso do upload</h2>
             <span id="summaryText" class="summary">Nenhum upload iniciado.</span>
         </div>
         <div class="progress-shell" aria-hidden="true">
             <div id="progressBar" class="progress-bar"></div>
         </div>
         <div id="partList" class="part-list"></div>
+    </section>
+
+    <section class="panel player-panel">
+        <div class="section-heading">
+            <h2>Player adaptativo</h2>
+            <span id="playerStatus" class="summary">Selecione um vídeo com manifesto DASH para iniciar.</span>
+        </div>
+        <video id="dashPlayer" class="dash-player" controls playsinline></video>
+        <div class="player-actions">
+            <button id="stopPlayerButton" class="button ghost" type="button">Parar player</button>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <h2>Vídeos do álbum</h2>
+            <span id="videoCount" class="summary">0 itens carregados.</span>
+        </div>
+        <div id="videoGallery" class="video-gallery empty-state">
+            Nenhum vídeo carregado ainda.
+        </div>
     </section>
 
     <section class="panel">

@@ -1,0 +1,39 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: video-processing-worker
+
+  datasource:
+    url: ${JDBC_POSTGRES_URL:jdbc:postgresql://localhost:5432/ivanbatistamoreno206660db}
+    driver-class-name: org.postgresql.Driver
+    username: ${JDBC_POSTGRES_USER:userdb}
+    password: ${JDBC_POSTGRES_PASSWORD:userdb}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: ${HIBERNATE_SHOW_SQL:false}
+        format_sql: ${HIBERNATE_FORMAT_SQL:false}
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+  accesskey: ${MINIO_ACCESS_KEY:ROOTNAME}
+  secretkey: ${MINIO_SECRET_KEY:ROOTPASSWORD}
+
+video-processing:
+  queue: ${VIDEO_PROCESSING_QUEUE:video.processing.queue}
+  exchange: ${VIDEO_PROCESSING_EXCHANGE:video.processing.exchange}
+  routing-key: ${VIDEO_PROCESSING_ROUTING_KEY:video.processing.process}
+  preview-duration-seconds: ${VIDEO_PREVIEW_DURATION_SECONDS:10}
+  thumbnail-second: ${VIDEO_THUMBNAIL_SECOND:5}
+  segment-duration-seconds: ${VIDEO_SEGMENT_DURATION_SECONDS:4}

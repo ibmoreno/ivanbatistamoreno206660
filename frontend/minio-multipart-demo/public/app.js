@@ -1,7 +1,10 @@
 const state = {
   accessToken: "",
   uploadSession: null,
-  aborted: false
+  aborted: false,
+  autoRefreshEnabled: false,
+  autoRefreshHandle: null,
+  dashPlayerInstance: null
 };
 
 const elements = {
@@ -15,20 +18,31 @@ const elements = {
   clearTokenButton: document.getElementById("clearTokenButton"),
   uploadButton: document.getElementById("uploadButton"),
   abortButton: document.getElementById("abortButton"),
+  loadVideosButton: document.getElementById("loadVideosButton"),
+  autoRefreshButton: document.getElementById("autoRefreshButton"),
+  stopPlayerButton: document.getElementById("stopPlayerButton"),
   copyResultButton: document.getElementById("copyResultButton"),
   clearLogsButton: document.getElementById("clearLogsButton"),
   authStatus: document.getElementById("authStatus"),
+  libraryStatus: document.getElementById("libraryStatus"),
+  playerStatus: document.getElementById("playerStatus"),
+  videoCount: document.getElementById("videoCount"),
   summaryText: document.getElementById("summaryText"),
   progressBar: document.getElementById("progressBar"),
   partList: document.getElementById("partList"),
   resultBox: document.getElementById("resultBox"),
-  logBox: document.getElementById("logBox")
+  logBox: document.getElementById("logBox"),
+  videoGallery: document.getElementById("videoGallery"),
+  dashPlayer: document.getElementById("dashPlayer")
 };
 
 elements.loginButton.addEventListener("click", handleLogin);
 elements.clearTokenButton.addEventListener("click", clearToken);
 elements.uploadButton.addEventListener("click", handleUpload);
 elements.abortButton.addEventListener("click", handleAbort);
+elements.loadVideosButton.addEventListener("click", loadAlbumVideos);
+elements.autoRefreshButton.addEventListener("click", toggleAutoRefresh);
+elements.stopPlayerButton.addEventListener("click", stopDashPlayback);
 elements.copyResultButton.addEventListener("click", copyResult);
 elements.clearLogsButton.addEventListener("click", () => {
   elements.logBox.innerHTML = "";
@@ -39,6 +53,10 @@ renderAuthState();
 
 function getApiBaseUrl() {
   return elements.apiBaseUrl.value.trim().replace(/\/$/, "");
+}
+
+function getCurrentAlbumId() {
+  return Number(elements.albumId.value);
 }
 
 function getHeaders(authenticated = true) {
@@ -143,7 +161,7 @@ async function handleUpload() {
     return;
   }
 
-  const albumId = Number(elements.albumId.value);
+  const albumId = getCurrentAlbumId();
   if (!Number.isFinite(albumId) || albumId < 1) {
     log("Informe um ID de álbum válido.", "error");
     return;
@@ -201,6 +219,7 @@ async function handleUpload() {
     setResult(completed);
     setProgress(100, "Upload concluído com sucesso.");
     log(`Upload finalizado. URL assinada gerada para ${completed.objectKey}`, "success");
+    await loadAlbumVideos();
   } catch (error) {
     if (!state.aborted) {
       log(`Falha no upload: ${error.message}`, "error");
@@ -306,10 +325,184 @@ async function handleAbort() {
     setResult(data);
     setProgress(0, "Upload abortado.");
     log("Upload abortado com sucesso.", "warning");
+    await loadAlbumVideos();
   } catch (error) {
     log(`Erro ao abortar upload: ${error.message}`, "error");
   } finally {
     elements.abortButton.disabled = true;
+  }
+}
+
+async function loadAlbumVideos() {
+  const albumId = getCurrentAlbumId();
+  if (!Number.isFinite(albumId) || albumId < 1) {
+    log("Informe um ID de álbum válido para listar os vídeos.", "error");
+    return;
+  }
+
+  if (!state.accessToken) {
+    log("Faça login antes de consultar a biblioteca.", "error");
+    return;
+  }
+
+  try {
+    elements.libraryStatus.textContent = "Carregando vídeos do álbum...";
+    elements.libraryStatus.className = "status neutral";
+
+    const response = await fetch(`${getApiBaseUrl()}/api/v1/album/${albumId}/video`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${state.accessToken}`
+      }
+    });
+
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+      throw new Error(data.message || "Não foi possível listar os vídeos.");
+    }
+
+    renderVideoGallery(Array.isArray(data) ? data : []);
+    setResult(data);
+    elements.libraryStatus.textContent = "Biblioteca atualizada com sucesso.";
+    elements.libraryStatus.className = "status success";
+    log(`Biblioteca do álbum ${albumId} carregada com ${data.length} item(ns).`, "success");
+  } catch (error) {
+    renderVideoGallery([]);
+    elements.libraryStatus.textContent = `Erro ao carregar vídeos: ${error.message}`;
+    elements.libraryStatus.className = "status error";
+    log(`Erro ao carregar vídeos: ${error.message}`, "error");
+  }
+}
+
+function renderVideoGallery(videos) {
+  elements.videoCount.textContent = `${videos.length} item(ns) carregados.`;
+
+  if (!videos.length) {
+    elements.videoGallery.className = "video-gallery empty-state";
+    elements.videoGallery.textContent = "Nenhum vídeo encontrado para este álbum.";
+    return;
+  }
+
+  elements.videoGallery.className = "video-gallery";
+  elements.videoGallery.innerHTML = "";
+
+  for (const video of videos) {
+    const card = document.createElement("article");
+    card.className = "video-card";
+    card.innerHTML = createVideoCardMarkup(video);
+
+    const playDashButton = card.querySelector("[data-action='play-dash']");
+    const usePreviewButton = card.querySelector("[data-action='play-preview']");
+
+    if (playDashButton) {
+      playDashButton.addEventListener("click", () => startDashPlayback(video));
+    }
+
+    if (usePreviewButton) {
+      usePreviewButton.addEventListener("click", () => playPreviewInMainPlayer(video));
+    }
+
+    elements.videoGallery.appendChild(card);
+  }
+}
+
+function createVideoCardMarkup(video) {
+  const uploadStatus = normalizeStatus(video.uploadStatus);
+  const processingStatus = normalizeStatus(video.processingStatus);
+  const duration = video.durationSeconds ? `${video.durationSeconds}s` : "Aguardando";
+  const createdAt = video.createdAt ? formatDateTime(video.createdAt) : "-";
+  const processedAt = video.processedAt ? formatDateTime(video.processedAt) : "-";
+
+  return `
+    <div class="video-media">
+      ${createMediaMarkup(video)}
+    </div>
+    <div class="video-card-body">
+      <h3 class="video-title">${escapeHtml(video.originalFileName || video.objectKey || "Vídeo sem nome")}</h3>
+      <div class="video-meta">
+        <span class="status-chip ${uploadStatus.cssClass}">Upload: ${uploadStatus.label}</span>
+        <span class="status-chip ${processingStatus.cssClass}">Pipeline: ${processingStatus.label}</span>
+      </div>
+      <div class="video-grid">
+        <div class="video-metric"><strong>Duração</strong>${duration}</div>
+        <div class="video-metric"><strong>Partes</strong>${video.totalParts || "-"}</div>
+        <div class="video-metric"><strong>Criado em</strong>${createdAt}</div>
+        <div class="video-metric"><strong>Processado em</strong>${processedAt}</div>
+      </div>
+      <div class="video-actions">
+        ${video.previewUrl ? `<button class="button ghost" type="button" data-action="play-preview">Abrir preview</button>` : ""}
+        ${video.dashManifestUrl ? `<button class="button primary" type="button" data-action="play-dash">Abrir DASH</button>` : ""}
+        ${video.rendition360Url ? `<a class="button ghost link" target="_blank" rel="noreferrer" href="${video.rendition360Url}">360p</a>` : ""}
+        ${video.rendition720Url ? `<a class="button ghost link" target="_blank" rel="noreferrer" href="${video.rendition720Url}">720p</a>` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function createMediaMarkup(video) {
+  if (video.thumbnailUrl) {
+    return `<img src="${video.thumbnailUrl}" alt="Thumbnail do vídeo ${escapeHtml(video.originalFileName || "sem nome")}">`;
+  }
+
+  if (video.previewUrl) {
+    return `<video src="${video.previewUrl}" muted preload="metadata"></video>`;
+  }
+
+  return `<div class="video-placeholder">Processamento ainda sem thumbnail disponível.</div>`;
+}
+
+function startDashPlayback(video) {
+  if (!video.dashManifestUrl) {
+    log("Este vídeo ainda não possui manifesto DASH disponível.", "warning");
+    return;
+  }
+
+  stopDashPlayback();
+
+  state.dashPlayerInstance = dashjs.MediaPlayer().create();
+  state.dashPlayerInstance.initialize(elements.dashPlayer, video.dashManifestUrl, true);
+  elements.playerStatus.textContent = `Player DASH ativo para ${video.originalFileName || video.objectKey}`;
+  log(`Player DASH iniciado para ${video.dashManifestUrl}`, "success");
+}
+
+function playPreviewInMainPlayer(video) {
+  if (!video.previewUrl) {
+    log("Este vídeo ainda não possui preview curto disponível.", "warning");
+    return;
+  }
+
+  stopDashPlayback();
+  elements.dashPlayer.src = video.previewUrl;
+  elements.dashPlayer.play().catch(() => {});
+  elements.playerStatus.textContent = `Reproduzindo preview curto de ${video.originalFileName || video.objectKey}`;
+  log(`Preview curto aberto para ${video.previewUrl}`, "success");
+}
+
+function stopDashPlayback() {
+  if (state.dashPlayerInstance) {
+    state.dashPlayerInstance.reset();
+    state.dashPlayerInstance = null;
+  }
+  elements.dashPlayer.pause();
+  elements.dashPlayer.removeAttribute("src");
+  elements.dashPlayer.load();
+  elements.playerStatus.textContent = "Selecione um vídeo com manifesto DASH para iniciar.";
+}
+
+function toggleAutoRefresh() {
+  state.autoRefreshEnabled = !state.autoRefreshEnabled;
+  elements.autoRefreshButton.textContent = state.autoRefreshEnabled
+    ? "Desativar auto refresh"
+    : "Ativar auto refresh";
+
+  if (state.autoRefreshEnabled) {
+    state.autoRefreshHandle = window.setInterval(loadAlbumVideos, 10000);
+    log("Auto refresh ativado a cada 10 segundos.", "info");
+    loadAlbumVideos();
+  } else {
+    window.clearInterval(state.autoRefreshHandle);
+    state.autoRefreshHandle = null;
+    log("Auto refresh desativado.", "info");
   }
 }
 
@@ -337,11 +530,11 @@ function updatePartState(partNumber, status, meta) {
   const stateNode = row.querySelector(".part-state");
   const metaNode = row.querySelector(".part-meta");
   stateNode.className = `part-state ${status}`;
-  stateNode.textContent = translateStatus(status);
+  stateNode.textContent = translatePartStatus(status);
   metaNode.textContent = meta;
 }
 
-function translateStatus(status) {
+function translatePartStatus(status) {
   switch (status) {
     case "uploading":
       return "Enviando";
@@ -352,6 +545,31 @@ function translateStatus(status) {
     default:
       return "Pendente";
   }
+}
+
+function normalizeStatus(status) {
+  const normalized = (status || "UNKNOWN").toLowerCase().replace(/_/g, "-");
+  return {
+    cssClass: normalized,
+    label: status || "UNKNOWN"
+  };
+}
+
+function formatDateTime(value) {
+  try {
+    return new Date(value).toLocaleString("pt-BR");
+  } catch {
+    return value;
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("\"", "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 async function parseJsonResponse(response) {

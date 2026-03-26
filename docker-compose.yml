@@ -16,6 +16,18 @@ services:
       LANG: C.UTF-8
       LC_ALL: C.UTF-8
 
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+    environment:
+      TZ: "America/Cuiaba"
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+
   minio:
     container_name: minio
     image: minio/minio:latest
@@ -56,9 +68,12 @@ services:
   backend-api:
     container_name: backend-api
     image: ibmoreno/backend-api:latest
-    build: .
+    build:
+      context: .
+      dockerfile: backend-api/Dockerfile
     depends_on:
       - postgres
+      - rabbitmq
       - minio
       - minio-init
     ports:
@@ -70,8 +85,43 @@ services:
       JDBC_POSTGRES_URL: ${POSTGRES_URL}
       JDBC_POSTGRES_USER: ${POSTGRES_USER}
       JDBC_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
       SPRINGDOC_API_DOCS_ENABLED: true
       SPRINGDOC_SWAGGER_UI_ENABLED: true
+
+  video-processing-worker:
+    container_name: video-processing-worker
+    build:
+      context: .
+      dockerfile: worker/video-processing-worker/Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+      - minio
+      - minio-init
+      - backend-api
+    restart: unless-stopped
+    environment:
+      TZ: "America/Cuiaba"
+      JDBC_POSTGRES_URL: ${POSTGRES_URL}
+      JDBC_POSTGRES_USER: ${POSTGRES_USER}
+      JDBC_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      VIDEO_PROCESSING_QUEUE: ${VIDEO_PROCESSING_QUEUE:-video.processing.queue}
+      VIDEO_PROCESSING_EXCHANGE: ${VIDEO_PROCESSING_EXCHANGE:-video.processing.exchange}
+      VIDEO_PROCESSING_ROUTING_KEY: ${VIDEO_PROCESSING_ROUTING_KEY:-video.processing.process}
+      VIDEO_PREVIEW_DURATION_SECONDS: ${VIDEO_PREVIEW_DURATION_SECONDS:-10}
+      VIDEO_THUMBNAIL_SECOND: ${VIDEO_THUMBNAIL_SECOND:-5}
+      VIDEO_SEGMENT_DURATION_SECONDS: ${VIDEO_SEGMENT_DURATION_SECONDS:-4}
 
 volumes:
   postgres_data:
