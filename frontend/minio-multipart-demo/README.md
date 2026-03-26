@@ -1,6 +1,6 @@
 # Demo Front-End Multipart Upload
 
-Projeto exemplo em Node.js puro para testar o upload multipart de video direto no MinIO usando os endpoints do backend Spring.
+Projeto exemplo em Node.js puro para testar o upload multipart de video direto no MinIO usando os endpoints do backend Spring, com biblioteca de videos processados, thumbnail, preview curto e player MPEG-DASH.
 
 ## Como executar
 
@@ -22,6 +22,10 @@ http://localhost:3000
 - envia cada parte diretamente para o MinIO com `PUT` nas URLs assinadas
 - conclui o upload em `/api/v1/album/{id}/video/multipart/complete`
 - permite abortar o upload em `/api/v1/album/{id}/video/multipart`
+- lista os videos do album em `/api/v1/album/{id}/video`
+- mostra thumbnail e status de processamento
+- reproduz preview curto no player principal
+- abre o manifesto DASH no player adaptativo da pagina
 
 ## Configuração padrão usada pela tela
 
@@ -35,3 +39,4 @@ http://localhost:3000
 - O MinIO precisa ter CORS liberado para o front conseguir ler o header `ETag`.
 - Em multipart upload compatível com S3, cada parte deve ter no mínimo `5 MB`, exceto a última.
 - Se a API estiver protegida por JWT, o login da tela já guarda o `accessToken` em memória.
+- Para o player adaptativo funcionar, o endpoint de listagem precisa retornar `dashManifestUrl`.

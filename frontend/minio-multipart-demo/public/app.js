@@ -47,6 +47,12 @@ elements.copyResultButton.addEventListener("click", copyResult);
 elements.clearLogsButton.addEventListener("click", () => {
   elements.logBox.innerHTML = "";
 });
+window.addEventListener("beforeunload", () => {
+  if (state.autoRefreshHandle) {
+    window.clearInterval(state.autoRefreshHandle);
+  }
+  stopDashPlayback();
+});
 
 hydrateTokenFromStorage();
 renderAuthState();
@@ -375,9 +381,15 @@ async function loadAlbumVideos() {
 }
 
 function renderVideoGallery(videos) {
-  elements.videoCount.textContent = `${videos.length} item(ns) carregados.`;
+  const orderedVideos = [...videos].sort((left, right) => {
+    const rightDate = Date.parse(right.createdAt || "") || 0;
+    const leftDate = Date.parse(left.createdAt || "") || 0;
+    return rightDate - leftDate;
+  });
 
-  if (!videos.length) {
+  elements.videoCount.textContent = `${orderedVideos.length} item(ns) carregados.`;
+
+  if (!orderedVideos.length) {
     elements.videoGallery.className = "video-gallery empty-state";
     elements.videoGallery.textContent = "Nenhum vídeo encontrado para este álbum.";
     return;
@@ -386,7 +398,7 @@ function renderVideoGallery(videos) {
   elements.videoGallery.className = "video-gallery";
   elements.videoGallery.innerHTML = "";
 
-  for (const video of videos) {
+  for (const video of orderedVideos) {
     const card = document.createElement("article");
     card.className = "video-card";
     card.innerHTML = createVideoCardMarkup(video);
@@ -445,7 +457,7 @@ function createMediaMarkup(video) {
   }
 
   if (video.previewUrl) {
-    return `<video src="${video.previewUrl}" muted preload="metadata"></video>`;
+    return `<video src="${video.previewUrl}" muted playsinline preload="metadata"></video>`;
   }
 
   return `<div class="video-placeholder">Processamento ainda sem thumbnail disponível.</div>`;
@@ -454,6 +466,11 @@ function createMediaMarkup(video) {
 function startDashPlayback(video) {
   if (!video.dashManifestUrl) {
     log("Este vídeo ainda não possui manifesto DASH disponível.", "warning");
+    return;
+  }
+
+  if (!window.dashjs) {
+    log("A biblioteca dash.js não foi carregada na página.", "error");
     return;
   }
 
@@ -556,11 +573,11 @@ function normalizeStatus(status) {
 }
 
 function formatDateTime(value) {
-  try {
-    return new Date(value).toLocaleString("pt-BR");
-  } catch {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
     return value;
   }
+  return parsed.toLocaleString("pt-BR");
 }
 
 function escapeHtml(value) {
